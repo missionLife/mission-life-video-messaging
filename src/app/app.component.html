@@ -9,6 +9,7 @@
   <mat-select id="sponsorship-select" placeholder="Select a sponsorship" *ngIf="sponsorships" formControlName="sponsorship">
     <mat-option *ngFor="let sponsorship of sponsorships" [value]="sponsorship">{{sponsorship.title}}</mat-option>
   </mat-select>
+  <mat-error *ngIf="hasError('sponsorship', 'required') && showError('sponsorship')">Sponsorship is required</mat-error>
 
   <p>
     <b>Supporter: </b><br/>
@@ -22,7 +23,8 @@
 
   <div>
     <b>Video: </b><br/>
-    <input id="video" type="file" placeholder="Select a video" accept="video/*" formControlName="file" />
+    <input id="video" type="file" placeholder="Select a video" accept="video/*" formControlName="file" /><br/>
+    <mat-error *ngIf="hasError('file', 'required') && showError('file')">Sponsorship is required</mat-error>
   </div>
 
   <p><button mat-raised-button type="submit" color="primary">Save</button></p>

@@ -51,6 +51,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  public hasError = (controlName: string, errorName: string) => {
+    return this.form.controls[controlName].hasError(errorName);
+  }
+
+  public showError = (controlName: string) => {
+    return !this.form.controls[controlName].pristine || this.form.controls[controlName].touched;
+  }
+
   private createForm(): void {
     const sponsorshipCtl: FormControl = new FormControl('', [Validators.required]);
     sponsorshipCtl.valueChanges.subscribe(change => {
