@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {HttpClientModule} from '@angular/common/http';
+import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
 
 @NgModule({
@@ -14,9 +16,10 @@ import { AppMaterialModule } from './app.material.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ReachService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
