@@ -10,6 +10,7 @@ import { AppMaterialModule } from './app.material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AWSService } from './services/aws.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { environment } from '../environments/environment';
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [ReachService],
+  providers: [ReachService, AWSService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
