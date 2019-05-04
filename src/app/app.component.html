@@ -1,23 +1,30 @@
+<img src="../assets/mission-life-logo.png"/>
 <h1>Video Messaging</h1>
 <p>This is a proof of concept application that will allow you to upload a video to a YouTube partner channel including tags for supporter and sponsorship.</p>
 
 <mat-progress-spinner mode="indeterminate" *ngIf="!sponsorships"></mat-progress-spinner>
-
-<mat-form-field>
-  <mat-select placeholder="Select a sponsorship" *ngIf="sponsorships" [ngModel]="selectedSponsorship" (ngModelChange)="selectedSponsorship = $event; sponsorshipChange()">
+<form [formGroup]="form" (ngSubmit)="save()">
+  <b>Sponsorship: </b>
+  <mat-select id="sponsorship-select" placeholder="Select a sponsorship" *ngIf="sponsorships" formControlName="sponsorship">
     <mat-option *ngFor="let sponsorship of sponsorships" [value]="sponsorship">{{sponsorship.title}}</mat-option>
   </mat-select>
-</mat-form-field>
 
-<p *ngIf="selectedSponsorship">
-  Supporter: {{supporter?.supporter.name}}
-</p>
+  <p>
+    <b>Supporter: </b><br/>
+    <span *ngIf="selectedSponsorship">{{supporter?.supporter.name}}</span>
+  </p>
 
-<p *ngIf="selectedSponsorship">
-  Partner: {{supporter?.sponsorship.place.title}}
-</p>
+  <p>
+    <b>Partner: </b><br/>
+    <span *ngIf="selectedSponsorship">{{supporter?.sponsorship.place.title}}</span>
+  </p>
 
-<div>
-  <label for="video">Select a video</label>
-  <input id="video" type="file" placeholder="Select a video"/>
-</div>
+  <div>
+    <b>Video: </b>
+    <input id="video" type="file" placeholder="Select a video"/>
+  </div>
+
+  <p><button mat-raised-button type="submit" color="primary">Save</button></p>
+
+</form>
+

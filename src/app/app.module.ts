@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import {FormsModule} from '@angular/forms';
     AppRoutingModule,
     AppMaterialModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [ReachService],
   bootstrap: [AppComponent]
