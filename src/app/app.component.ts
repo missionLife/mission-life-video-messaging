@@ -36,18 +36,19 @@ export class AppComponent implements OnInit {
       });
   }
 
-  public save_orig(): Promise<boolean> {
+  public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      console.log(this.form.value);
-      const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-      console.log(metadata);
-      resolve(true);
+      if (!this.form.valid) {
+        resolve(false);
+      } else {
+        console.log(this.form.value);
+        const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
+        console.log(metadata);
+        console.log('in save');
+        // this.awsService.uploadS3File();
+        resolve(true);
+      }
     });
-  }
-
-  public save() {
-    console.log('in save');
-    this.awsService.uploadS3File();
   }
 
   private createForm(): void {
@@ -57,7 +58,8 @@ export class AppComponent implements OnInit {
       this.sponsorshipChange();
     });
     this.form = this.fb.group({
-      sponsorship: sponsorshipCtl
+      sponsorship: sponsorshipCtl,
+      file: new FormControl('', [Validators.required])
     });
   }
 }
