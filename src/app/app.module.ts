@@ -8,6 +8,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AppMaterialModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ReachService],
   bootstrap: [AppComponent]
