@@ -10,8 +10,8 @@ export class AWSService {
   public async uploadS3File(file, metadata) {
       console.log('in upload S3 file');
       AWS.config.update({
-        accessKeyId: 'XXX',
-        secretAccessKey: 'XXX'
+        accessKeyId: 'XX',
+        secretAccessKey: 'X'
     });
 
       const s3 = new AWS.S3();
@@ -20,8 +20,9 @@ export class AWSService {
         Bucket: 'mission-life-videos',
         Key: file.name,
         Metadata: {
-          'x-amz-meta-person-metadata': JSON.stringify(metadata)
-        }
+          'person-metadata': JSON.stringify(metadata)
+        },
+        ContentType: file.type
        };
       s3.putObject(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred
