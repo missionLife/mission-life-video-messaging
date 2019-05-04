@@ -3,6 +3,7 @@ import {ReachService} from './services/reach.service';
 import {Supporter} from './models/supporter';
 import {Sponsorship} from './models/sponsorship';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { MetadataService } from './services/metadata.service';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,8 @@ export class AppComponent implements OnInit {
   public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       console.log(this.form.value);
+      const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
+      console.log(metadata);
       resolve(true);
     });
   }
