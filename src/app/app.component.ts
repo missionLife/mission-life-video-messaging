@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   public supporter: Supporter;
   public form: FormGroup;
 
+  fileToUpload: File = null;
+
   constructor(private fb: FormBuilder, private reachService: ReachService, private awsService: AWSService) { }
 
   public ngOnInit() {
@@ -39,16 +41,24 @@ export class AppComponent implements OnInit {
   public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (!this.form.valid) {
+        console.log('invalid form');
         resolve(false);
       } else {
         console.log(this.form.value);
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         console.log(metadata);
         console.log('in save');
-        // this.awsService.uploadS3File();
+        if (this.fileToUpload != null) {
+          console.log(this.fileToUpload);
+          this.awsService.uploadS3File(this.fileToUpload);
+        }
         resolve(true);
       }
     });
+  }
+
+  public handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0); /* now you can work with the file list */
   }
 
   private createForm(): void {

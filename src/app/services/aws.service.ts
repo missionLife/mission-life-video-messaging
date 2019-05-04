@@ -20,18 +20,18 @@ const HTTP_OPTIONS = {
 export class AWSService {
   constructor(private http: HttpClient) { }
 
-  public async uploadS3File() {
+  public async uploadS3File(file) {
       console.log('in upload S3 file');
       AWS.config.update({
-        accessKeyId: 'XXXX-Change this',
-        secretAccessKey: 'XXX-Chagnge this'
+        accessKeyId: 'XXX',
+        secretAccessKey: 'XXX'
     });
 
       const s3 = new AWS.S3();
       const params = {
-        Body: 'abcdefg',
+        Body: file,
         Bucket: 'mission-life-videos',
-        Key: 'HappyFace.txt'
+        Key: file.name
        };
       s3.putObject(params, function(err, data) {
         if (err) console.log(err, err.stack); // an error occurred

@@ -22,7 +22,7 @@
 
   <div>
     <b>Video: </b><br/>
-    <input id="video" type="file" placeholder="Select a video" accept="video/*" formControlName="file" />
+    <input id="video-file" type="file" placeholder="Select a video" accept="video/*" (change)="handleFileInput($event.target.files)" formControlName="file"/>
   </div>
 
   <p><button mat-raised-button type="submit" color="primary">Save</button></p>
