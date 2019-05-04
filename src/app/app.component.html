@@ -1,18 +1,21 @@
 <h1>Video Messaging</h1>
 <p>This is a proof of concept application that will allow you to upload a video to a YouTube partner channel including tags for supporter and sponsorship.</p>
 
+<mat-progress-spinner mode="indeterminate" *ngIf="!sponsorships"></mat-progress-spinner>
+
 <mat-form-field>
-  <mat-select placeholder="Select a sponsorship">
-    <mat-option value="kyle">Kyle Pinette</mat-option>
-    <mat-option value="james">James Henderson</mat-option>
-    <mat-option value="dan">Dan Leonard</mat-option>
-    <mat-option value="kevin">Kevin Wang</mat-option>
+  <mat-select placeholder="Select a sponsorship" *ngIf="sponsorships" [ngModel]="selectedSponsorship" (ngModelChange)="selectedSponsorship = $event; sponsorshipChange()">
+    <mat-option *ngFor="let sponsorship of sponsorships" [value]="sponsorship">{{sponsorship.title}}</mat-option>
   </mat-select>
 </mat-form-field>
 
-<p>Show the partner information</p>
+<p *ngIf="selectedSponsorship">
+  Supporter: {{supporter?.supporter.name}}
+</p>
 
-<p>Show the supporter information</p>
+<p *ngIf="selectedSponsorship">
+  Supporter: {{supporter?.sponsorship.place.title}}
+</p>
 
 <div>
   <label for="video">Select a video</label>

@@ -4,7 +4,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {HttpClientModule} from '@angular/common/http';
+import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,9 +17,11 @@ import { AppMaterialModule } from './app.material.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [ReachService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
