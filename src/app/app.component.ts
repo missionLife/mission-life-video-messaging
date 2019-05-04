@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   public supporter: Supporter;
   public form: FormGroup;
 
+  fileToUpload: File = null;
+
   constructor(private fb: FormBuilder, private reachService: ReachService, private awsService: AWSService) { }
 
   public ngOnInit() {
@@ -45,9 +47,17 @@ export class AppComponent implements OnInit {
     });
   }
 
+  public handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0); /* now you can work with the file list */
+  }
+
+
   public save() {
     console.log('in save');
-    this.awsService.uploadS3File();
+    if (this.fileToUpload != null) {
+      console.log(this.fileToUpload);
+      this.awsService.uploadS3File(this.fileToUpload);
+    }
   }
 
   private createForm(): void {
