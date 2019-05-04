@@ -1,4 +1,4 @@
 export class Supporter {
-  public id: number;
-  public title: string;
+  public supporter: any;
+  public sponsorship: any;
 }

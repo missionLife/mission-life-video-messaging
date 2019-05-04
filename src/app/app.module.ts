@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AppMaterialModule } from './app.material.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppMaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [ReachService],
   bootstrap: [AppComponent]

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ReachService} from './services/reach.service';
 import {Supporter} from './models/supporter';
+import {Sponsorship} from './models/sponsorship';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,23 @@ import {Supporter} from './models/supporter';
 export class AppComponent implements OnInit {
   title = 'mission-life-video-messaging';
 
-  public supporters: Supporter[];
+  public sponsorships: Sponsorship[];
+  public selectedSponsorship: Sponsorship;
+  public supporter: Supporter;
 
   constructor(private reachService: ReachService) { }
 
   public ngOnInit() {
-    this.reachService.getAllSupporters()
-      .subscribe(supporters => this.supporters = supporters);
+    this.reachService.getAllSponsorships()
+      .subscribe(supporters => this.sponsorships = supporters.sort((a, b) => ('' + a.title).localeCompare(b.title)));
+  }
+
+  public sponsorshipChange() {
+    this.reachService.getSupporters(this.selectedSponsorship)
+      .subscribe(supporters => {
+        if (supporters.length > 0) {
+          this.supporter = supporters[0];
+        }
+      });
   }
 }
