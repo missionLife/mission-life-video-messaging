@@ -57,6 +57,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  public hasError = (controlName: string, errorName: string) => {
+    return this.form.controls[controlName].hasError(errorName);
+  }
+
+  public showError = (controlName: string) => {
+    return !this.form.controls[controlName].pristine || this.form.controls[controlName].touched;
+  }
+
   public handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0); /* now you can work with the file list */
   }
