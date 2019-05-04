@@ -2,7 +2,8 @@
 <h2>Recorder</h2>
 <div>
     <label for="time-interval">Time Interval (milliseconds):</label>
-    <input type="text" id="time-interval" value="5000">
+    <input type="text" id="time-interval" [value]="defaultRecordingTimeInterval" readonly />
+    <span> ({{defaultRecordingTimeInterval/1000}} seconds)</span>
 </div>
 <div>
     <label for="video-recorderType">Recorder Type:</label>
@@ -21,9 +22,13 @@
 <hr />
 <button id="start-recording" (click)="onClickStart()" [disabled]="startButtonDisabled">Start</button>
 <button id="stop-recording" (click)="onClickStop()" [disabled]="stopButtonDisabled">Stop</button>
-<button id="pause-recording" (click)="onClickPause()" [disabled]="pauseButtonDisabled">Pause</button>
-<button id="resume-recording" (click)="onClickResume()" [disabled]="resumeButtonDisabled">Resume</button>
+<button *ngIf="showPauseButton" id="pause-recording" (click)="onClickPause()" [disabled]="pauseButtonDisabled">Pause</button>
+<button *ngIf="showResumeButton" id="resume-recording" (click)="onClickResume()" [disabled]="resumeButtonDisabled">Resume</button>
 <button id="save-recording" (click)="onClickSave()" [disabled]="saveButtonDisabled">Save</button>
-<div id="videos-container">
-    <video class="recorder" controls=""></video>
+<div id="videos-container" #videosContainer>
+    <video class="recorder" controls="" [ngStyle]="{'display':startButtonDisabled ? 'block' : 'none'}"></video>
+    <div [ngStyle]="{'display':displayPreviewContainer ? 'block' : 'none'}">
+        <h3>Preview</h3>
+        <iframe id="preview-container" target="previewContainer"></iframe>
+    </div>
 </div>

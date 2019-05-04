@@ -51,6 +51,8 @@ export function captureUserMedia(mediaConstraints, successCallback, errorCallbac
 
 export var mediaRecorder;
 
+export var generatedBlob;
+
 export function onMediaSuccess(stream) {
     var video = document.querySelector('video');
     var videosContainer = document.getElementById('videos-container');
@@ -81,21 +83,37 @@ export function onMediaSuccess(stream) {
     mediaRecorder.videoHeight = videoHeight;
     mediaRecorder.ondataavailable = function (blob) {
         console.info('blob', blob);
-        var a = document.createElement('a');
-        a.target = '_blank';
-        a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') Time Length: ' + getTimeLength(timeInterval);
-        a.href = URL.createObjectURL(blob);
-        videosContainer.appendChild(a);
-        videosContainer.appendChild(document.createElement('hr'));
+        var blobUrl = URL.createObjectURL(blob);
+        var videoWidth = document.getElementById('video-width').value || 320;
+        var videoHeight = document.getElementById('video-height').value || 240;
+    
+        var previewContainer = document.getElementById('preview-container');
+        previewContainer.height = videoHeight;
+        previewContainer.width = videoWidth;
+        previewContainer.src = blobUrl;
+
+        generatedBlob = blob;
+
+        // var a = document.createElement('a');
+        // a.target = '_blank';
+        // a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') Time Length: ' + getTimeLength(timeInterval);
+        // a.href = URL.createObjectURL(blob);
+        // videosContainer.appendChild(a);
+        // videosContainer.appendChild(document.createElement('hr'));
+
+        // You can let this keep recording videos every "n" seconds (time-interval), but we stop recording after the first time interval.
+        var btnStop = document.getElementById('stop-recording');
+        btnStop.click();
     };
     var timeInterval = document.querySelector('#time-interval').value;
     if (timeInterval) timeInterval = parseInt(timeInterval);
-    else timeInterval = 5 * 1000;
+    else timeInterval = 10 * 1000;  // default time interval is 10 seconds
     // get blob after specific time interval
     mediaRecorder.start(timeInterval);
 }
 
 export function onMediaError(e) {
+    // Log errors to console as part of prototype only
     console.error('media error', e);
 }
 
