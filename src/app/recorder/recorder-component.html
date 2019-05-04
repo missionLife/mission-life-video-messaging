@@ -1,0 +1,29 @@
+<hr />
+<h2>Recorder</h2>
+<div>
+    <label for="time-interval">Time Interval (milliseconds):</label>
+    <input type="text" id="time-interval" value="5000">
+</div>
+<div>
+    <label for="video-recorderType">Recorder Type:</label>
+    <select id="video-recorderType">
+        <option value="[Best Available Recorder]">[Best Available Recorder]</option>
+        <option value="MediaRecorder API">MediaRecorder API</option>
+        <option value="WebP encoding into WebM">WebP encoding into WebM</option>
+    </select>
+</div>
+<div>
+    <label for="video-width">Video Width:</label>
+    <input type="text" id="video-width" value="320">
+    <label for="video-height">Video Height:</label>
+    <input type="text" id="video-height" value="240">
+</div>
+<hr />
+<button id="start-recording" (click)="onClickStart()" [disabled]="startButtonDisabled">Start</button>
+<button id="stop-recording" (click)="onClickStop()" [disabled]="stopButtonDisabled">Stop</button>
+<button id="pause-recording" (click)="onClickPause()" [disabled]="pauseButtonDisabled">Pause</button>
+<button id="resume-recording" (click)="onClickResume()" [disabled]="resumeButtonDisabled">Resume</button>
+<button id="save-recording" (click)="onClickSave()" [disabled]="saveButtonDisabled">Save</button>
+<div id="videos-container">
+    <video class="recorder" controls=""></video>
+</div>

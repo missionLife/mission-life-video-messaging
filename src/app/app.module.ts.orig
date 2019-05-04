@@ -7,11 +7,14 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
+<<<<<<< Updated upstream
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { RecorderComponent } from './recorder/recorder-component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AWSService } from './services/aws.service';
+=======
+import { RecorderComponent } from './recorder/recorder-component';
+>>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
