@@ -12,7 +12,7 @@ import { AWSService } from '../app/services/aws.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'mission-life-video-messaging';
+  title = 'Mission Life - Video Messaging';
 
   public sponsorships: Sponsorship[];
   public selectedSponsorship: Sponsorship;
