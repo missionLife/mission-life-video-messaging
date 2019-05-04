@@ -12,7 +12,7 @@ import { AWSService } from '../app/services/aws.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'mission-life-video-messaging';
+  title = 'Mission Life - Video Messaging';
 
   public sponsorships: Sponsorship[];
   public selectedSponsorship: Sponsorship;
@@ -38,26 +38,27 @@ export class AppComponent implements OnInit {
       });
   }
 
-  public save_orig(): Promise<boolean> {
+  public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      console.log(this.form.value);
-      const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-      console.log(metadata);
-      resolve(true);
+      if (!this.form.valid) {
+        console.log('invalid form');
+        resolve(false);
+      } else {
+        console.log(this.form.value);
+        const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
+        console.log(metadata);
+        console.log('in save');
+        if (this.fileToUpload != null) {
+          console.log(this.fileToUpload);
+          this.awsService.uploadS3File(this.fileToUpload);
+        }
+        resolve(true);
+      }
     });
   }
 
   public handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0); /* now you can work with the file list */
-  }
-
-
-  public save() {
-    console.log('in save');
-    if (this.fileToUpload != null) {
-      console.log(this.fileToUpload);
-      this.awsService.uploadS3File(this.fileToUpload);
-    }
   }
 
   private createForm(): void {
@@ -67,7 +68,8 @@ export class AppComponent implements OnInit {
       this.sponsorshipChange();
     });
     this.form = this.fb.group({
-      sponsorship: sponsorshipCtl
+      sponsorship: sponsorshipCtl,
+      file: new FormControl('', [Validators.required])
     });
   }
 }
