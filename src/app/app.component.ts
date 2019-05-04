@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         console.log('in save');
         if (this.fileToUpload != null) {
           console.log(this.fileToUpload);
-          this.awsService.uploadS3File(this.fileToUpload);
+          this.awsService.uploadS3File(this.fileToUpload, metadata);
         }
         resolve(true);
       }
