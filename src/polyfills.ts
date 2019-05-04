@@ -61,3 +61,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+ // Add global to window, assigning the value of window itself.
+ // https://github.com/angular/angular-cli/issues/9827#issuecomment-386154063
+(window as any).global = window;
