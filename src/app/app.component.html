@@ -11,7 +11,7 @@
 
   <p>
     <b>Supporter: </b><br/>
-    <span *ngIf="selectedSponsorship">{{supporter?.supporter.name}}</span>
+    <span *ngIf="supporter">{{supporter?.supporter.name}}</span>
   </p>
 
   <p>
@@ -20,11 +20,10 @@
   </p>
 
   <div>
-    <b>Video: </b>
-    <input id="video" type="file" placeholder="Select a video"/>
+    <b>Video: </b><br/>
+    <input id="video" type="file" placeholder="Select a video" accept="video/*" />
   </div>
 
   <p><button mat-raised-button type="submit" color="primary">Save</button></p>
 
 </form>
-

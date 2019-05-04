@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
   public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      alert('saving the form');
+      console.log(this.form.value);
       resolve(true);
     });
   }
