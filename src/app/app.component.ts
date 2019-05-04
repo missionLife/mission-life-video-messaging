@@ -3,7 +3,7 @@ import {ReachService} from './services/reach.service';
 import {Supporter} from './models/supporter';
 import {Sponsorship} from './models/sponsorship';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-
+import { AWSService } from '../app/services/aws.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   public supporter: Supporter;
   public form: FormGroup;
 
-  constructor(private fb: FormBuilder, private reachService: ReachService) { }
+  constructor(private fb: FormBuilder, private reachService: ReachService, private awsService: AWSService) { }
 
   public ngOnInit() {
     this.createForm();
@@ -34,11 +34,16 @@ export class AppComponent implements OnInit {
       });
   }
 
-  public save(): Promise<boolean> {
+  public save_orig(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       console.log(this.form.value);
       resolve(true);
     });
+  }
+
+  public save() {
+    console.log('in save');
+    this.awsService.uploadS3File();
   }
 
   private createForm(): void {
