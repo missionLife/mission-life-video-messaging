@@ -15,9 +15,11 @@ export class AppComponent implements OnInit {
   title = 'Mission Life - Video Messaging';
 
   public sponsorships: Sponsorship[];
-  public selectedSponsorship: Sponsorship;
+  public selectedSponsorship: Sponsorship = null;
   public supporter: Supporter;
   public form: FormGroup;
+  public uploadProgress: number;
+  public uploadComplete = false;
 
   fileToUpload: File = null;
 
@@ -30,43 +32,46 @@ export class AppComponent implements OnInit {
   }
 
   public sponsorshipChange() {
-    this.reachService.getSupporters(this.selectedSponsorship)
-      .subscribe(supporters => {
-        if (supporters.length > 0) {
-          this.supporter = supporters[0];
-        }
-      });
+    if (this.selectedSponsorship) {
+      this.reachService.getSupporters(this.selectedSponsorship)
+        .subscribe(supporters => {
+          if (supporters.length > 0) {
+            this.supporter = supporters[0];
+          }
+        });
+    }
   }
 
   public save(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (!this.form.valid) {
-        console.log('invalid form');
         resolve(false);
       } else {
-        console.log(this.form.value);
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-        console.log(metadata);
-        console.log('in save');
         if (this.fileToUpload != null) {
-          console.log(this.fileToUpload);
-          this.awsService.uploadS3File(this.fileToUpload, metadata);
+          this.awsService.uploadS3File(this.fileToUpload, metadata, progress => this.uploadProgress = progress)
+            .subscribe(() => {
+              this.uploadProgress = null;
+              this.selectedSponsorship = null;
+              this.uploadComplete = true;
+              this.form.reset();
+              this.fileToUpload = undefined;
+              this.supporter = undefined;
+            });
         }
         resolve(true);
       }
     });
   }
 
-  public hasError = (controlName: string, errorName: string) => {
-    return this.form.controls[controlName].hasError(errorName);
-  }
-
-  public showError = (controlName: string) => {
-    return !this.form.controls[controlName].pristine || this.form.controls[controlName].touched;
-  }
-
   public handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0); /* now you can work with the file list */
+  }
+
+  public selectFileClick(event: any) {
+    if (!this.selectedSponsorship) {
+      event.preventDefault();
+    }
   }
 
   private createForm(): void {

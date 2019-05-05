@@ -2,19 +2,21 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import * as AWS from 'aws-sdk';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable()
 export class AWSService {
   constructor(private http: HttpClient) { }
 
-  public async uploadS3File(file, metadata) {
-      console.log('in upload S3 file');
+  public uploadS3File(file, metadata, progressCallback: (progress: number) => void): Observable<any> {
       AWS.config.update({
-        accessKeyId: 'XX',
-        secretAccessKey: 'X'
+        accessKeyId: 'AKIATSRTY4JEELYVDAD4',
+        secretAccessKey: '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'
     });
 
-      const s3 = new AWS.S3();
+      const result = new Subject();
+
+      const s3 = new AWS.S3({ region: 'us-east-2' });
       const params = {
         Body: file,
         Bucket: 'mission-life-videos',
@@ -24,13 +26,17 @@ export class AWSService {
         },
         ContentType: file.type
        };
-      s3.putObject(params, (err, data) => {
+
+      s3.putObject(params).on('httpUploadProgress', progress => {
+        progressCallback(Math.round(progress.loaded / progress.total * 100));
+      }).send((err, data) => {
         if (err) {
-          console.log(err, err.stack); // an error occurred
+          console.log(err, err.stack);
         } else {
-          console.log(data);           // successful response
+          result.next();
         }
       });
-      return null;
+
+      return result;
   }
 }
