@@ -55,6 +55,8 @@ export class AppComponent implements OnInit {
               this.selectedSponsorship = null;
               this.uploadComplete = true;
               this.form.reset();
+              this.fileToUpload = undefined;
+              this.supporter = undefined;
             });
         }
         resolve(true);

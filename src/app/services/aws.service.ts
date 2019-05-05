@@ -9,7 +9,6 @@ export class AWSService {
   constructor(private http: HttpClient) { }
 
   public uploadS3File(file, metadata, progressCallback: (progress: number) => void): Observable<any> {
-      console.log('in upload S3 file');
       AWS.config.update({
         accessKeyId: 'AKIATSRTY4JEELYVDAD4',
         secretAccessKey: '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'

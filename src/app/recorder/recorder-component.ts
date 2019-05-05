@@ -12,7 +12,7 @@ import { MetadataService } from '../services/metadata.service';
 import { Supporter } from '../models/supporter';
 import { Sponsorship } from '../models/sponsorship';
 
-/* 
+/*
  * Recorder component for devices that don't have built in "Take Video" when the "Choose File" link is clicked (e.g., non-mobile devices)
  */
 @Component({
@@ -140,7 +140,7 @@ export class RecorderComponent implements OnInit {
     const blob = generatedBlob;
     const fileToUpload: File = new File([blob], 'blob' + Date.now());
     const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-    this.awsService.uploadS3File(fileToUpload, metadata);
+    this.awsService.uploadS3File(fileToUpload, metadata, () => {});
 
     this.saveButtonDisabled = true;
 

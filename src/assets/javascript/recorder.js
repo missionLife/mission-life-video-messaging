@@ -9,46 +9,6 @@ export function captureUserMedia(mediaConstraints, successCallback, errorCallbac
     navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
 }
 
-// document.querySelector('#start-recording').onclick = function () {
-//     console.log('start recording');
-//     this.disabled = true;
-//     captureUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
-// };
-
-// document.querySelector('#stop-recording').onclick = function () {
-//     console.log('stop recording');
-//     this.disabled = true;
-//     mediaRecorder.stop();
-//     mediaRecorder.stream.stop();
-
-//     document.querySelector('#pause-recording').disabled = true;
-//     document.querySelector('#start-recording').disabled = false;
-// };
-
-// document.querySelector('#pause-recording').onclick = function () {
-//     console.log('pause recording');
-//     this.disabled = true;
-//     mediaRecorder.pause();
-
-//     document.querySelector('#resume-recording').disabled = false;
-// };
-
-// document.querySelector('#resume-recording').onclick = function () {
-//     console.log('resume recording');
-//     this.disabled = true;
-//     mediaRecorder.resume();
-
-//     document.querySelector('#pause-recording').disabled = false;
-// };
-
-// document.querySelector('#save-recording').onclick = function () {
-//     console.log('save recording');
-//     this.disabled = true;
-//     mediaRecorder.save();
-
-//     // alert('Drop WebM file on Chrome or Firefox. Both can play entire file. VLC player or other players may not work.');
-// };
-
 export var mediaRecorder;
 
 export var generatedBlob;
@@ -86,7 +46,7 @@ export function onMediaSuccess(stream) {
         var blobUrl = URL.createObjectURL(blob);
         var videoWidth = document.getElementById('video-width').value || 320;
         var videoHeight = document.getElementById('video-height').value || 240;
-    
+
         var previewContainer = document.getElementById('preview-container');
         previewContainer.height = videoHeight;
         previewContainer.width = videoWidth;
