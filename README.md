@@ -25,3 +25,24 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+# Overview
+## Go to the cloudfront URL
+## Select a sponsorship
+## The supporter and partner information will be displayed
+## The user can then select or take a video, then retake the video if needed
+## The user can then click save and transfer the video to S3
+## A lambda in AWS transfers the video to Mission Life YouTube channel and tags the video using key value pair metadata
+
+# Limitations
+## We could make REACH API calls to get all the supporters
+## There is no authenication to the site currently but it should added
+## The Google YouTube API goes over quota too quickly. Maybe a bug in the API or due to how the files are uploaded
+## Some plain old JS mixed with Typescript for some of the video recording and AWS libraries. We should have use REACT.
+## The videos are not encrypted at REST and rely on AWS permission to the S3 bucket
+
+# cloudfront for POC
+https://d2mpmy5zo7bwqt.cloudfront.net/
+
+# AWS Lambda function 
+## Written in Python and monitors S3 bucket. When a video is uploaded the function uses the metadata passed in key value pairs attached to the file in the S3 bucket. The file is then uploaded to the Mission Life YouTube channel and tagged with information about the sponsorship, supporter, and partner
