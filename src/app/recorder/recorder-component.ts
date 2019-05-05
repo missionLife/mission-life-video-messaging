@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ContentChildren, ContentChild, ViewChildren, ElementRef, QueryList, Input } from '@angular/core';
-import { test1 } from 'src/assets/javascript/demo';
 import {
   mediaConstraints,
   onMediaSuccess,
@@ -13,7 +12,9 @@ import { MetadataService } from '../services/metadata.service';
 import { Supporter } from '../models/supporter';
 import { Sponsorship } from '../models/sponsorship';
 
-
+/* 
+ * Recorder component for devices that don't have built in "Take Video" when the "Choose File" link is clicked (e.g., non-mobile devices)
+ */
 @Component({
   selector: 'app-recorder',
   templateUrl: './recorder-component.html',
@@ -43,20 +44,24 @@ export class RecorderComponent implements OnInit {
   //#endregion
 
   //#region Public Readonly Properties
+  // Show the pause button
   public get showPauseButton(): boolean {
     // Pause/resume functionality will not be exposed as part of the prototype.
     return false;
   }
 
+  // Show the resume button
   public get showResumeButton(): boolean {
     // Pause/resume functionality will not be exposed as part of the prototype.
     return false;
   }
 
+  // The value of the default recording time-interval
   public get defaultRecordingTimeInterval() {
     return RecorderComponent.DEFAULT_RECORDING_TIME_INTERVAL;
   }
 
+  // Flag to display the preview container
   public get displayPreviewContainer(): boolean {
     return !this.startButtonDisabled && (this.numTakes > 0);
   }
@@ -85,7 +90,6 @@ export class RecorderComponent implements OnInit {
     this.startButtonDisabled = true;
     this.numTakes++;
 
-    test1();
     captureUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
 
     this.pauseButtonDisabled = false;
