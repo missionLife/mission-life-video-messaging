@@ -10,8 +10,8 @@ export class AWSService {
 
   public uploadS3File(file, metadata, progressCallback: (progress: number) => void): Observable<any> {
       AWS.config.update({
-        accessKeyId: 'AKIATSRTY4JEELYVDAD4',
-        secretAccessKey: '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'
+        accessKeyId: 'AKIATSRTY4JEBH22DE63',
+        secretAccessKey: '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'
     });
 
       const result = new Subject();
