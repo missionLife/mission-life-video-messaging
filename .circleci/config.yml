@@ -2,23 +2,16 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.0
+orbs:
+  aws-cli: circleci/aws-cli@0.1.16
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/node:10
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
     working_directory: ~/repo
-
     steps:
-      - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -34,4 +27,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      - run: npm run build
+  deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: example
+      - run: npm run deploy

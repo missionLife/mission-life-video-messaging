@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e # Exit on any child process error
+
+CURRENT_DIRECTORY=$PWD
+
+npm run clean
+npm install
+
+mkdir -p dist
+
+cp ./infrastructure/cloudformation.yaml ./dist/cloudformation.yaml
+
+echo "Preparing Angular App"
+echo "This is the current directory $CURRENT_DIRECTORY"
+npm install
+npm install -g @angular/cli
+ng build --outputPath=$CURRENT_DIRECTORY/dist/s3 --configuration=development
