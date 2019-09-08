@@ -2,19 +2,18 @@
 set -e # Exit on any child process error
 
 export STACK_NAME=mission-life-video-messaging
-export CIRCLE_BRANCH=development
 
-echo "Current Building Environment is: $CIRCLE_BRANCH"
+echo "Current Building Environment is: $DRONE_BRANCH"
 
 #Find or Create S3 bucket
 echo "Setting up S3 bucket"
-(aws s3api get-bucket-location --bucket mission-life-video-messaging-bucket-$CIRCLE_BRANCH --region ${AWS_DEFAULT_REGION} || aws s3 mb s3://mission-life-video-messaging-bucket-$CIRCLE_BRANCH --region ${AWS_DEFAULT_REGION})
+(aws s3api get-bucket-location --bucket mission-life-video-messaging-bucket-$DRONE_BRANCH --region ${AWS_DEFAULT_REGION} || aws s3 mb s3://mission-life-video-messaging-bucket-$DRONE_BRANCH --region ${AWS_DEFAULT_REGION})
 
 # cloudformation.yaml package
 echo "Packaging artifacts"
 aws cloudformation package \
  --template-file "./dist/cloudformation.yaml" \
- --s3-bucket mission-life-video-messaging-bucket-$CIRCLE_BRANCH \
+ --s3-bucket mission-life-video-messaging-bucket-$DRONE_BRANCH \
  --output-template packaged-sam.yaml \
  --region ${AWS_DEFAULT_REGION}
 

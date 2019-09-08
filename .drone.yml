@@ -1,0 +1,14 @@
+pipeline:
+
+  install:
+    image: node:10
+    commands:
+      - npm install
+
+  build:
+    image: meltwaterfoundation/drone-serverless:1.27.2
+    commands:
+      - npm run build
+    when:
+      event: [ push ]
+      branch: [ development, staging, production ]
