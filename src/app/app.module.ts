@@ -4,10 +4,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from '@angular/common/http';
-import {ReachService} from './services/reach.service';
+import { HttpClientModule } from '@angular/common/http';
+import { ReachService} from './services/reach.service';
 import { AppMaterialModule } from './app.material.module';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecorderComponent } from './recorder/recorder-component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
