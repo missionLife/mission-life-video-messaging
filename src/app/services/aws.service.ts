@@ -19,10 +19,12 @@ export class AWSService {
     
     const result = new Subject();
 
+    const partner = metadata.partner.split(' ').join('');
+
     const params = {
       Body: file,
       Bucket: 'mission-life-youtube-upload-master',
-      Key: file.name,
+      Key: `${partner}/${file.name}`,
       Metadata: {
         'person-metadata': JSON.stringify(metadata)
       },
