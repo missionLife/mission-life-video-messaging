@@ -34,11 +34,11 @@
             "es5BrowserSupport": true
           },
           "configurations": {
-            "production": {
+            "master": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.master.ts"
                 }
               ],
               "optimization": true,
@@ -68,8 +68,8 @@
             "browserTarget": "mission-life-video-messaging:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "mission-life-video-messaging:build:production"
+            "master": {
+              "browserTarget": "mission-life-video-messaging:build:master"
             }
           }
         },
@@ -123,8 +123,8 @@
             "devServerTarget": "mission-life-video-messaging:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "mission-life-video-messaging:serve:production"
+            "master": {
+              "devServerTarget": "mission-life-video-messaging:serve:master"
             }
           }
         },
