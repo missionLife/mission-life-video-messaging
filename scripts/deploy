@@ -2,6 +2,7 @@
 set -e # Exit on any child process error
 
 export STACK_NAME=mission-life-video-messaging
+export AWS_DEFAULT_REGION=us-east-2
 
 echo "Current Building Environment is: $DRONE_BRANCH"
 
