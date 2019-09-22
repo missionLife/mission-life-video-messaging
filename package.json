@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "scripts/build",
     "clean": "rm -rf dist/",
+    "deploy": "scripts/deploy",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
