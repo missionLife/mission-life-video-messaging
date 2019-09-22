@@ -1,9 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Sponsorship} from '../models/sponsorship';
-import {Observable, Subject} from 'rxjs';
-import {Supporter} from '../models/supporter';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Sponsorship } from '../models/sponsorship';
+import { Observable, Subject } from 'rxjs';
+import { Supporter } from '../models/supporter';
 
 const REACH_URL = 'https://missionlife.reachapp.co/api/v1';
 const HTTP_OPTIONS = {

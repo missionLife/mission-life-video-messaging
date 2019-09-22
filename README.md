@@ -44,5 +44,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 # cloudfront for POC
 https://d2mpmy5zo7bwqt.cloudfront.net/
 
-# AWS Lambda function 
+# AWS Lambda function
 ## Written in Python and monitors S3 bucket. When a video is uploaded the function uses the metadata passed in key value pairs attached to the file in the S3 bucket. The file is then uploaded to the Mission Life YouTube channel and tagged with information about the sponsorship, supporter, and partner
+
