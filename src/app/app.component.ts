@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ReachService} from './services/reach.service';
-import {Supporter} from './models/supporter';
-import {Sponsorship} from './models/sponsorship';
+import { Component, OnInit } from '@angular/core';
+import { ReachService } from './services/reach.service';
+import { Supporter } from './models/supporter';
+import { Sponsorship}  from './models/sponsorship';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MetadataService } from './services/metadata.service';
 
