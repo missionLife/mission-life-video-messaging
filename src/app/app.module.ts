@@ -13,12 +13,18 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { S3Service } from './services/s3.service';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
+import { AuthViewComponent } from './components/auth-view/auth-view.component';
+import { UploadViewComponent } from './components/upload-view/upload-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RecorderComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    NavigationBarComponent,
+    AuthViewComponent,
+    UploadViewComponent
   ],
   imports: [
     BrowserModule,

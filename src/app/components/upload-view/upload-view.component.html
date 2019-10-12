@@ -1,0 +1,53 @@
+<div class="container" *ngIf="uploadComplete">
+  <mat-chip-list>
+    <mat-chip color="accent" selected>Upload complete!</mat-chip>
+  </mat-chip-list>
+
+  <button mat-raised-button color="primary" (click)="uploadComplete = false">Continue</button>
+</div>
+
+<div class="container" *ngIf="!uploadComplete">
+  <mat-progress-spinner mode="indeterminate" diameter="48" *ngIf="!sponsorships">Loading REACH data...</mat-progress-spinner>
+  <h4 *ngIf="!sponsorships">Loading REACH data...</h4>
+
+  <ng-container *ngIf="uploadProgress">
+    <label class="upload-status">Uploading {{this.fileToUpload.name}}</label>
+  </ng-container>
+
+  <mat-progress-bar *ngIf="uploadProgress" mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+
+  <form [formGroup]="form" (ngSubmit)="save()" *ngIf="sponsorships && !uploadProgress">
+    <mat-form-field>
+      <mat-select id="sponsorship-select" placeholder="Select a sponsorship" *ngIf="sponsorships" formControlName="sponsorship">
+        <mat-option *ngFor="let sponsorship of sponsorships" [value]="sponsorship">{{sponsorship.title}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="sponsorship-info" *ngIf="selectedSponsorship">
+      <div>
+        <label>Supporter:</label>
+        <span *ngIf="supporter">{{supporter?.supporter.name}}</span>
+      </div>
+
+      <div>
+        <label>Partner:</label>
+        <span *ngIf="selectedSponsorship">{{supporter?.sponsorship.place.title}}</span>
+      </div>
+    </div>
+
+    <div>
+      <label for="file" class="mat-raised-button mat-accent" [attr.disabled]="selectedSponsorship ? null : 'disabled'" (click)="selectFileClick($event)">
+        <ng-container *ngIf="fileToUpload">
+          {{fileToUpload.name}}
+        </ng-container>
+        <ng-container *ngIf="!fileToUpload">
+          Select a video
+        </ng-container>
+      </label>
+      <button [disabled]="!!uploadProgress" mat-raised-button type="submit" color="primary">Save</button>
+      <input id="file" style="visibility: hidden" type="file" placeholder="Select a video" accept="video/*"
+             (change)="handleFileInput($event.target.files)" formControlName="file"/>
+    </div>
+
+  </form>
+</div>
