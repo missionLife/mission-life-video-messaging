@@ -22,7 +22,7 @@ export class S3Service {
 
     const params = {
       Body: file,
-      Bucket: 'mission-life-youtube-upload-master',
+      Bucket: 'mission-life-youtube-data-api-upload',
       Key: `${partner}/${file.name}`,
       Metadata: {
         'person-metadata': JSON.stringify(metadata)
