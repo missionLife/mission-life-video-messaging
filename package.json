@@ -25,6 +25,7 @@
     "@angular/pwa": "^0.13.8",
     "@angular/router": "~7.2.0",
     "@angular/service-worker": "~7.0.0",
+    "amazon-cognito-identity-js": "^3.0.15",
     "aws-sdk": "^2.449.0",
     "core-js": "^2.5.4",
     "http-server": "^0.11.1",

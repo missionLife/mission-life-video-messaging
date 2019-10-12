@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
 
@@ -12,7 +11,7 @@ AWS.config.update({
 const s3 = new AWS.S3({ region: 'us-east-2' });
 
 @Injectable()
-export class AWSService {
+export class S3Service {
   constructor() { }
 
   public uploadS3File(file, metadata, progressCallback: (progress: number) => void): Observable<any> {

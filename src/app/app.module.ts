@@ -11,12 +11,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecorderComponent } from './recorder/recorder-component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { AWSService } from './services/aws.service';
+import { AWSService } from './services/s3.service';
+import { LoginFormComponent } from './components/login-form/login-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RecorderComponent
+    RecorderComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,

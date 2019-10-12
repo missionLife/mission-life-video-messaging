@@ -7,7 +7,7 @@ import {
   mediaRecorder,
   generatedBlob
 } from 'src/assets/javascript/recorder';
-import { AWSService } from '../services/aws.service';
+import { AWSService } from '../services/s3.service';
 import { MetadataService } from '../services/metadata.service';
 import { Supporter } from '../models/supporter';
 import { Sponsorship } from '../models/sponsorship';

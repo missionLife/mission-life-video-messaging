@@ -4,8 +4,8 @@ import { Supporter } from './models/supporter';
 import { Sponsorship}  from './models/sponsorship';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MetadataService } from './services/metadata.service';
+import { S3Service } from './services/s3.service';
 
-import { AWSService } from '../app/services/aws.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
   fileToUpload: File = null;
 
-  constructor(private fb: FormBuilder, private reachService: ReachService, private awsService: AWSService) { }
+  constructor(private fb: FormBuilder, private reachService: ReachService, private awsService: S3Service) { }
 
   public ngOnInit() {
     this.createForm();
