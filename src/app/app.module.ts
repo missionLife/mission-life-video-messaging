@@ -11,7 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecorderComponent } from './recorder/recorder-component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { AWSService } from './services/s3.service';
+import { S3Service } from './services/s3.service';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [ReachService, AWSService],
+  providers: [ReachService, S3Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

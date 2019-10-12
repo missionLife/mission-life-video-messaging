@@ -7,7 +7,7 @@ import {
   mediaRecorder,
   generatedBlob
 } from 'src/assets/javascript/recorder';
-import { AWSService } from '../services/s3.service';
+import { S3Service } from '../services/s3.service';
 import { MetadataService } from '../services/metadata.service';
 import { Supporter } from '../models/supporter';
 import { Sponsorship } from '../models/sponsorship';
@@ -69,7 +69,7 @@ export class RecorderComponent implements OnInit {
 
   //#region Constructor and Lifecyle Methods
   constructor(
-    private awsService: AWSService
+    private s3Service: S3Service
   ) {
     this.startButtonDisabled = false;
     this.stopButtonDisabled = true;
@@ -140,7 +140,7 @@ export class RecorderComponent implements OnInit {
     const blob = generatedBlob;
     const fileToUpload: File = new File([blob], 'blob' + Date.now());
     const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-    this.awsService.uploadS3File(fileToUpload, metadata, () => {});
+    this.s3Service.uploadS3File(fileToUpload, metadata, () => {});
 
     this.saveButtonDisabled = true;
 
