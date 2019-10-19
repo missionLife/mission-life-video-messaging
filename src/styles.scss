@@ -1,7 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 html, body {
   padding: 0;
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
 }
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// primaryColor #47c6f3
+// primaryLightColor #85f9ff
+// primaryDarkColor #0095c0
+// secondaryColor #e54616
+// secondaryLightColor #ff7945
+// secondaryDarkColor #ab0000
+// primaryTextColor #000000
+// secondaryTextColor #000000
+
+$mission-life-aqua:(
+  300: #85f9ff,
+  500: #47c6f3,
+  800: #0095c0,
+  contrast: (
+    300: #000000,
+    500: #000000,
+    800: #ffffff,
+  ),
+);
+$mission-life-orange:(
+  300: #ff7945,
+  500: #e54616,
+  800: #ab0000,
+  contrast: (
+    300: #000000,
+    500: #ffffff,
+    800: #ffffff,
+  ),
+);
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$mission-life-app-primary: mat-palette($mission-life-orange, 500, 300, 800);
+$mission-life-app-accent:  mat-palette($mission-life-aqua, 500, 300, 800);
+
+// The warn palette is optional (defaults to red).
+$mission-life-app-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$mission-life-app-theme: mat-light-theme($mission-life-app-primary, $mission-life-app-accent, $mission-life-app-warn);
+
+// Include theme styles for core and eachs component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+
+@include angular-material-theme($mission-life-app-theme);
