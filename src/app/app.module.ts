@@ -7,9 +7,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { AuthorizationService } from './services/authorization.service';
 import { ReachService } from './services/reach.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { S3Service } from './services/s3.service';
+
+
 
 import { AppMaterialModule } from './app.material.module';
 import { RecorderComponent } from './recorder/recorder-component';
@@ -39,7 +42,8 @@ import { UploadViewComponent } from './components/upload-view/upload-view.compon
   ],
   providers: [
     ReachService,
-    S3Service
+    S3Service,
+    AuthorizationService
   ],
   bootstrap: [AppComponent]
 })

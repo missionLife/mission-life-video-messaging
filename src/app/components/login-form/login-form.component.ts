@@ -1,11 +1,11 @@
 import {
   Component,
   OnInit,
-  Input,
-  Output,
-  EventEmitter
+  Input
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthorizationService } from "../../services/authorization.service";
 
 @Component({
   selector: 'app-login-form',
@@ -13,22 +13,34 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
+  emailVerificationMessage: boolean = false;
 
   form: FormGroup = new FormGroup({
-    username: new FormControl(''),
+    email: new FormControl(''),
     password: new FormControl(''),
   });
 
-  @Input() error: string | null;
+  constructor(
+    private auth: AuthorizationService,
+    private _router: Router
+  ) {}
 
-  @Output() submitEM = new EventEmitter();
+  @Input() error: string | null;
 
   ngOnInit() {}
 
-  submit() {
-    if (this.form.valid) {
-      this.submitEM.emit(this.form.value);
-    }
+  login() {
+    const email = this.form.value.email;
+    const password = this.form.value.password;
+    
+    this.auth.signIn(email, password).subscribe((data) => {
+      console.log('the DATA', data);
+      this._router.navigateByUrl('/');
+    }, (error)=> {
+      this.error = error.message;
+      this.emailVerificationMessage = true;
+      
+    });   
   }
 
 }
