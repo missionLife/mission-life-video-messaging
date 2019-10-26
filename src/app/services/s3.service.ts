@@ -1,23 +1,25 @@
 import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
-
-AWS.config.setPromisesDependency(Promise);
-AWS.config.update({
-  accessKeyId: '',
-  secretAccessKey: ''
-});
-
-const s3 = new AWS.S3({
-  region: 'us-east-2'
-});
+import { AuthorizationService } from '../services/authorization.service';
 
 @Injectable()
 export class S3Service {
-  constructor() { }
+  s3: AWS.S3;
 
-  public uploadS3File(file, metadata, progressCallback: (progress: number) => void): Observable<any> {
-    
+  constructor(
+    private auth: AuthorizationService
+  ) {}
+
+  uploadS3File(
+    file,
+    metadata,
+    progressCallback: (progress: number) => void
+  ): Observable<any> {
+
+    if (!this.s3) {
+      this.s3 = new AWS.S3();
+    }
     const result = new Subject();
 
     const partner = metadata.partner.split(' ').join('');
@@ -32,7 +34,7 @@ export class S3Service {
       ContentType: file.type
     };
 
-    s3.putObject(params).on('httpUploadProgress', progress => {
+    this.s3.putObject(params).on('httpUploadProgress', progress => {
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
       if (err) {
@@ -42,6 +44,6 @@ export class S3Service {
       }
     });
 
-    return result;
-  }
+      return result;
+    }
 }

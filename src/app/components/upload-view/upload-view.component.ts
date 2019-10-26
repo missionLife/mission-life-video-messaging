@@ -32,7 +32,7 @@ export class UploadViewComponent implements OnInit {
     private S3Service: S3Service
   ) { }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.createForm();
     this.reachService.getAllSponsorships()
       .subscribe(supporters => this.sponsorships = supporters.sort((a, b) => ('' + a.title).localeCompare(b.title)));

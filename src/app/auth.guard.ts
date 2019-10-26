@@ -5,23 +5,25 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-// import { AuthorizationService } from './services/authorization.service';
+import { AuthorizationService } from './services/authorization.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    // private authorizationService: AuthorizationService
+    private auth: AuthorizationService
   ) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // const currentUser = this.authorizationService.cognitoUser;
-    if (true) {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) {
+    const currentUser = this.auth.getAuthenticatedUser();
+    if (currentUser) {
       return true;
     }
-
     // If the user is not logged in, force redirect to login page
-    // this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
-    // return false;
+    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
+    return false;
   }
 }

@@ -7,6 +7,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from "../../services/authorization.service";
 
+const INVALID_CREDENTIALS_ERROR_MESSAGES = {
+  'User does not exist.': 'Invalid Username or Password'
+}
+
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -34,12 +38,10 @@ export class LoginFormComponent implements OnInit {
     const password = this.form.value.password;
     
     this.auth.signIn(email, password).subscribe((data) => {
-      console.log('the DATA', data);
       this._router.navigateByUrl('/');
     }, (error)=> {
-      this.error = error.message;
+      this.error = INVALID_CREDENTIALS_ERROR_MESSAGES[error.message] || error.message;
       this.emailVerificationMessage = true;
-      
     });   
   }
 
