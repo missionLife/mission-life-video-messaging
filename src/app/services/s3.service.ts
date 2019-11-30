@@ -33,7 +33,7 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('s3 putObject call updated 3', progressCallback);
+    
     this.s3.putObject(params).on('httpUploadProgress', function(progress) {
       return progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {

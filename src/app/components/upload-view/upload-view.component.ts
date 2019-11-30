@@ -21,7 +21,7 @@ export class UploadViewComponent implements OnInit {
   public selectedSponsorship: Sponsorship = null;
   public supporter: Supporter;
   public form: FormGroup;
-  public uploadProgress: number;
+  public uploadProgress: boolean;
   public uploadComplete = false;
 
   fileToUpload: File = null;
@@ -50,22 +50,16 @@ export class UploadViewComponent implements OnInit {
   }
 
   public save(): Promise<boolean> {
-    console.log('1 upload progress', this.uploadProgress)
     return new Promise<boolean>((resolve, reject) => {
       if (!this.form.valid) {
         resolve(false);
       } else {
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         if (this.fileToUpload != null) {
-          this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => {
-            console.log('hey');
-            console.log('upload callback', progress);
-            this.uploadProgress = progress
-            console.log('this.uploadProgress', this.uploadProgress);
-          })
+
+          this.S3Service.uploadS3File(this.fileToUpload, metadata, () => this.uploadProgress = true)
             .subscribe(() => {
-              console.log('2 upload progress', this.uploadProgress)
-              this.uploadProgress = null;
+              this.uploadProgress = false;
               this.selectedSponsorship = null;
               this.uploadComplete = true;
               this.form.reset();

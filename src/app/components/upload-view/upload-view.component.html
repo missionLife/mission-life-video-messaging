@@ -10,11 +10,8 @@
   <mat-progress-spinner mode="indeterminate" diameter="48" *ngIf="!sponsorships">Loading REACH data...</mat-progress-spinner>
   <h4 *ngIf="!sponsorships">Loading REACH data...</h4>
 
-  <ng-container *ngIf="uploadProgress">
-    <label class="upload-status">Uploading {{this.fileToUpload.name}}</label>
-  </ng-container>
-
-  <mat-progress-bar *ngIf="uploadProgress" mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+  <mat-progress-spinner mode="indeterminate" diameter="48" *ngIf="uploadProgress"></mat-progress-spinner>
+  <h4 *ngIf="uploadProgress">Uploading {{this.fileToUpload.name}}! One momemt...</h4>
 
   <form [formGroup]="form" (ngSubmit)="save()" *ngIf="sponsorships && !uploadProgress">
     <mat-form-field>
