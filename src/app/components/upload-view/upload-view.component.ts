@@ -56,8 +56,8 @@ export class UploadViewComponent implements OnInit {
       } else {
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         if (this.fileToUpload != null) {
-
-          this.S3Service.uploadS3File(this.fileToUpload, metadata, () => this.uploadProgress = true)
+          this.uploadProgress = true;
+          this.S3Service.uploadS3File(this.fileToUpload, metadata)
             .subscribe(() => {
               this.uploadProgress = false;
               this.selectedSponsorship = null;
