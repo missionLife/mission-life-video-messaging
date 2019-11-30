@@ -35,6 +35,7 @@ export class S3Service {
     };
 
     this.s3.putObject(params).on('httpUploadProgress', progress => {
+      console.log('progress in S# Service: ', progress);
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
       if (err) {
