@@ -50,14 +50,21 @@ export class UploadViewComponent implements OnInit {
   }
 
   public save(): Promise<boolean> {
+    console.log('1 upload progress', this.uploadProgress)
     return new Promise<boolean>((resolve, reject) => {
       if (!this.form.valid) {
         resolve(false);
       } else {
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         if (this.fileToUpload != null) {
-          this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => this.uploadProgress = progress)
+          this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => {
+            console.log('hey');
+            console.log('upload callback', progress);
+            this.uploadProgress = progress
+            console.log('this.uploadProgress', this.uploadProgress);
+          })
             .subscribe(() => {
+              console.log('2 upload progress', this.uploadProgress)
               this.uploadProgress = null;
               this.selectedSponsorship = null;
               this.uploadComplete = true;
