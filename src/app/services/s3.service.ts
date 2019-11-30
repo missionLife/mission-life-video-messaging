@@ -33,7 +33,7 @@ export class S3Service {
       },
       ContentType: file.type
     };
-
+    console.log('s3 putObject call');
     this.s3.putObject(params).on('httpUploadProgress', progress => {
       console.log('progress in S# Service: ', progress);
       progressCallback(Math.round(progress.loaded / progress.total * 100));
