@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
-import { CognitoIdentityCredentials, AWSError } from 'aws-sdk'
+import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -12,14 +12,37 @@ const poolData = {
 
 const userPool = new CognitoUserPool(poolData);
 
+let that: any;
+
 @Injectable()
 export class AuthorizationService {
   static identityPoolId: string = 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa';
   cognitoUser: any;
-  cognitoAwsCredentials: CognitoIdentityCredentials;
-  static userPoolLoginKey: string = `cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE`;
   
-  constructor() {}
+  constructor(private cookieService: CookieService) {
+    that = this;
+    this.inItAuth();
+  }
+
+  inItAuth() {
+    const jwtToken = this.cookieService.get('awsToken');
+    
+    if (jwtToken) {
+      const awsCredentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
+        Logins: {
+          'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': jwtToken
+        },
+      }, {
+        region: 'us-east-2'
+      });
+  
+      AWS.config.update({
+        region: 'us-east-2',
+        credentials: awsCredentials
+      });
+    }
+  }
 
   signIn(
     email: string,
@@ -45,19 +68,26 @@ export class AuthorizationService {
 
           cognitoUser.getSession(function(err, result) {
             if (result) {
-              console.log('You are now logged in.');
-        
+              
+              // Get Token for AWS Cognito Creds
+              const jwtToken = result.getIdToken().getJwtToken();
+
+              // Store Token in Cookies
+              that.cookieService.set('awsToken', jwtToken);
+
               // Add the User's Id Token to the Cognito credentials login map.
+              const awsCredentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
+                Logins: {
+                  'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': jwtToken
+                },
+              }, {
+                region: 'us-east-2'
+              });
+
               AWS.config.update({
                 region: 'us-east-2',
-                credentials: new AWS.CognitoIdentityCredentials({
-                  IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
-                  Logins: {
-                    'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': result.getIdToken().getJwtToken()
-                  },
-                }, {
-                  region: 'us-east-2'
-                })
+                credentials: awsCredentials
               });
             }
           });
@@ -87,6 +117,7 @@ export class AuthorizationService {
 
   logOut() {
     this.getAuthenticatedUser().signOut();
+    this.cookieService.delete('awsToken');
     this.cognitoUser = null;
   }
 

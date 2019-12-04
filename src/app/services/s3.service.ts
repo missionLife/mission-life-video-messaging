@@ -2,23 +2,32 @@ import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class S3Service {
-  s3: AWS.S3;
 
   constructor(
     private auth: AuthorizationService
   ) {}
+
+
+  private initS3(): any {
+    AWS.config.update({
+      region: 'us-east-2',
+    });
+
+    const s3 = new AWS.S3();
+
+    return s3;
+  }
 
   uploadS3File(
     file,
     metadata
   ): Observable<any> {
 
-    if (!this.s3) {
-      this.s3 = new AWS.S3();
-    }
+    
     const result = new Subject();
 
     const partner = metadata.partner.split(' ').join('');
@@ -33,7 +42,7 @@ export class S3Service {
       ContentType: file.type
     };
     
-    this.s3.putObject(params).send((err, data) => {
+    this.initS3().putObject(params).send((err, data) => {
       if (err) {
         console.log(err, err.stack);
       } else {
