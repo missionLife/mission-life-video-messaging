@@ -18,6 +18,7 @@ let that: any;
 export class AuthorizationService {
   static identityPoolId: string = 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa';
   cognitoUser: any;
+  authToken: string | null;
   
   constructor(
     private cookieService: CookieService,
@@ -28,12 +29,12 @@ export class AuthorizationService {
   }
 
   inItAuth() {
-    const jwtToken = this.cookieService.get('awsToken');
-    if (jwtToken) {
+    this.authToken = this.cookieService.get('mlosc');
+    if (this.authToken) {
       const awsCredentials = new AWS.CognitoIdentityCredentials({
         IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
         Logins: {
-          'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': jwtToken
+          'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': this.authToken
         },
       }, {
         region: 'us-east-2'
@@ -72,19 +73,19 @@ export class AuthorizationService {
             if (result) {
               
               // Get Token for AWS Cognito Creds
-              const jwtToken = result.getIdToken().getJwtToken();
+              that.authToken = result.getIdToken().getJwtToken();
 
               // Setting cookie to expire 1 hour from now
               const oneHourFromNow = new Date;
               oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
               // Store Token in Cookies
-              that.cookieService.set('awsToken', jwtToken, oneHourFromNow);
+              that.cookieService.set('mlosc', that.authToken, oneHourFromNow);
 
               // Add the User's Id Token to the Cognito credentials login map.
               const awsCredentials = new AWS.CognitoIdentityCredentials({
                 IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
                 Logins: {
-                  'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': jwtToken
+                  'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': that.authToken
                 },
               }, {
                 region: 'us-east-2'
@@ -111,8 +112,8 @@ export class AuthorizationService {
     });
   }
 
-  isLoggedIn() {    
-    return userPool.getCurrentUser() != null;
+  isLoggedIn() {
+    return userPool.getCurrentUser() != null && this.authToken;
   }
 
   getAuthenticatedUser() {
@@ -122,7 +123,8 @@ export class AuthorizationService {
 
   logOut() {
     this.getAuthenticatedUser().signOut();
-    this.cookieService.delete('awsToken');
+    this.cookieService.delete('mlosc');
+    this.authToken = null;
     this.cognitoUser = null;
   }
 

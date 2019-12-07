@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ) {
     const currentUser = this.auth.getAuthenticatedUser();
-    const token = this.cookieService.get('awsToken');
+    const token = this.cookieService.get('mlosc');
     if (currentUser && token) {
       return true;
     }
