@@ -6,12 +6,14 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { AuthorizationService } from './services/authorization.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private auth: AuthorizationService
+    private auth: AuthorizationService,
+    private cookieService: CookieService
   ) { }
 
   canActivate(
@@ -19,7 +21,8 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ) {
     const currentUser = this.auth.getAuthenticatedUser();
-    if (currentUser) {
+    const token = this.cookieService.get('awsToken');
+    if (currentUser && token) {
       return true;
     }
     // If the user is not logged in, force redirect to login page

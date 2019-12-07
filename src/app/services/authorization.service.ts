@@ -19,14 +19,16 @@ export class AuthorizationService {
   static identityPoolId: string = 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa';
   cognitoUser: any;
   
-  constructor(private cookieService: CookieService) {
+  constructor(
+    private cookieService: CookieService,
+    private router: Router
+  ) {
     that = this;
     this.inItAuth();
   }
 
   inItAuth() {
     const jwtToken = this.cookieService.get('awsToken');
-    
     if (jwtToken) {
       const awsCredentials = new AWS.CognitoIdentityCredentials({
         IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
@@ -72,8 +74,11 @@ export class AuthorizationService {
               // Get Token for AWS Cognito Creds
               const jwtToken = result.getIdToken().getJwtToken();
 
+              // Setting cookie to expire 1 hour from now
+              const oneHourFromNow = new Date;
+              oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
               // Store Token in Cookies
-              that.cookieService.set('awsToken', jwtToken);
+              that.cookieService.set('awsToken', jwtToken, oneHourFromNow);
 
               // Add the User's Id Token to the Cognito credentials login map.
               const awsCredentials = new AWS.CognitoIdentityCredentials({
