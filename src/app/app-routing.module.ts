@@ -8,7 +8,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: AuthViewComponent
-    
+  },
+  {
+    path: 'newPassword',
+    component: AuthViewComponent
   },
   {
     path: 'upload',

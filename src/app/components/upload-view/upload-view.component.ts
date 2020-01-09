@@ -10,6 +10,7 @@ import { Supporter } from '../../models/supporter';
 import { Sponsorship } from '../../models/sponsorship';
 import { MetadataService } from '../../services/metadata.service';
 import { S3Service } from '../../services/s3.service';
+import * as AWS from 'aws-sdk';
 
 @Component({
   selector: 'app-upload-view',

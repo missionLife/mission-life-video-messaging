@@ -1,3 +1,4 @@
 <div>
-  <app-login-form></app-login-form>
+  <app-login-form *ngIf="!newPassword"></app-login-form>
+  <app-new-password-form *ngIf="newPassword"></app-new-password-form>
 </div>

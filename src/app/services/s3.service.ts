@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
-import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class S3Service {
@@ -12,11 +11,10 @@ export class S3Service {
   ) {}
 
 
-  private initS3(): any {
+  private initS3() {
     AWS.config.update({
-      region: 'us-east-2',
+      region: 'us-east-2'
     });
-
     const s3 = new AWS.S3();
 
     return s3;
@@ -50,6 +48,6 @@ export class S3Service {
       }
     });
 
-      return result;
-    }
+    return result;
+  } 
 }

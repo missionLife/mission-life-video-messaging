@@ -12,7 +12,7 @@ import { AuthorizationService } from './services/authorization.service';
 import { ReachService } from './services/reach.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { S3Service } from './services/s3.service';
-
+import { CognitoUserService } from './services/cognito-user.service';
 
 
 import { AppMaterialModule } from './app.material.module';
@@ -21,8 +21,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { AuthViewComponent } from './components/auth-view/auth-view.component';
 import { UploadViewComponent } from './components/upload-view/upload-view.component';
-
-
+import { NewPasswordFormComponent } from './components/new-password-form/new-password-form.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,8 @@ import { UploadViewComponent } from './components/upload-view/upload-view.compon
     LoginFormComponent,
     NavigationBarComponent,
     AuthViewComponent,
-    UploadViewComponent
+    UploadViewComponent,
+    NewPasswordFormComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +43,7 @@ import { UploadViewComponent } from './components/upload-view/upload-view.compon
   ],
   providers: [
     AuthorizationService,
+    CognitoUserService,
     CookieService,
     ReachService,
     S3Service,
