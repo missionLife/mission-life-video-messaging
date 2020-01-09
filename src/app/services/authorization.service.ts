@@ -39,7 +39,7 @@ export class AuthorizationService {
     const that = this;
     const token = this.cookieService.get('mlosc');
 
-    const awsCredentials = new AWS.CognitoIdentityCredentials({
+    let awsCredentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
       Logins: {
         'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': token
@@ -68,7 +68,7 @@ export class AuthorizationService {
   
           const refreshToken = result.getRefreshToken();
           
-          const needsRefresh = AWS.config.credentials.needsRefresh();
+          const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
           
           if (needsRefresh) {
             cognitoUser.refreshSession(refreshToken, (err, session) => {
@@ -79,12 +79,14 @@ export class AuthorizationService {
                 
                 const newToken = session.getIdToken().getJwtToken();
                 that.authToken = newToken;
-                AWS.config.credentials.params.Logins[
+                
+                ( <any> AWS.config.credentials ).params.Logins[
                   'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE'
                 ] = newToken;
+
                 try {
                   awsCredentials.clearCachedId();
-                  AWS.config.credentials.refresh((err)=> {
+                  ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).refresh((err)=> {
                     if (err) {
                       console.log(err);
                     } else {
