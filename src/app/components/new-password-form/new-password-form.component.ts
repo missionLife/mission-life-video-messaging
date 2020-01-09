@@ -29,17 +29,13 @@ export class NewPasswordFormComponent implements OnInit {
   ngOnInit() {
     const currentUser = this.auth.getAuthenticatedUser();
     const token = this.cookieService.get('mlosc');
-    console.log('currentUser: ', currentUser);
-    console.log('token: ', token);
     this.username = currentUser.username;
-    console.log('the current username: ', this.username);
     if (currentUser && token) {
       this.router.navigate(['/upload']);
     }
   }
 
   registerNewPassword() {
-    console.log(this.newPasswordUser);
     this.errorMessage = null;
     this.newPasswordUser = {
       username: this.username,
@@ -47,16 +43,13 @@ export class NewPasswordFormComponent implements OnInit {
       password: this.form.value.password
     };
 
-    console.log('the new user object: ', this.newPasswordUser);
     this.cognitoUserService.newPassword(this.newPasswordUser, this);
   }
 
   cognitoCallback(message: string, result: any) {
     if (message != null) { //error
       this.errorMessage = message;
-      console.log("result cognitoCallback New Password Form: " + JSON.stringify(this.errorMessage));
     } else { //success
-      console.log(`success cognitoCallback New Password Form Result: ${result}`);
       this.router.navigate(['/upload']);
     }
   }
