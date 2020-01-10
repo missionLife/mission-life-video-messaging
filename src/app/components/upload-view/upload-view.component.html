@@ -41,7 +41,7 @@
           Select a video
         </ng-container>
       </label>
-      <button [disabled]="!!uploadProgress" mat-raised-button type="submit" color="primary">Save</button>
+      <button [disabled]="!!uploadProgress || !fileToUpload" mat-raised-button type="submit" color="primary">Save</button>
       <input id="file" style="visibility: hidden" type="file" placeholder="Select a video" accept="video/*"
              (change)="handleFileInput($event.target.files)" formControlName="file"/>
     </div>
