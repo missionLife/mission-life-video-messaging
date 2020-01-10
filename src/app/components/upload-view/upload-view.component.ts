@@ -54,7 +54,7 @@ export class UploadViewComponent implements OnInit {
       console.log('THE FORM: ', this.form.status);
       console.log('FORM SPONSORSHIP: ', this.sponsorshipCtl.value);
       console.log('FORM FILE: ', this.fileCtl.value);
-      if (!this.form.valid) {
+      if (!this.fileToUpload || !this.sponsorshipCtl.value) {
         console.log('SAVE CLICKED IF');
         resolve(false);
       } else {
@@ -81,7 +81,7 @@ export class UploadViewComponent implements OnInit {
 
   public handleFileInput(files: FileList) {
     console.log('handleFileInput files: ', files);
-    console.log('handleFileInput files.item(0): ', files.item(0));
+    console.log('handleFileInput files.item(0): ', files.item(0).name);
     this.fileToUpload = files.item(0); /* now you can work with the file list */
   }
 
