@@ -80,6 +80,8 @@ export class UploadViewComponent implements OnInit {
   }
 
   public handleFileInput(files: FileList) {
+    console.log('handleFileInput files: ', files);
+    console.log('handleFileInput files.item(0): ', files.item(0));
     this.fileToUpload = files.item(0); /* now you can work with the file list */
   }
 
