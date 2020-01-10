@@ -39,14 +39,15 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    
-    this.initS3().putObject(params).send((err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-      } else {
-        result.next();
-      }
-    });
+    console.log('uploadToS3 s3 params', params);
+    this.initS3();
+    // .putObject(params).send((err, data) => {
+    //   if (err) {
+    //     console.log(err, err.stack);
+    //   } else {
+    //     result.next();
+    //   }
+    // });
 
     return result;
   } 

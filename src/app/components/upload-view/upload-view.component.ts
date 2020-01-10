@@ -20,7 +20,12 @@ export class UploadViewComponent implements OnInit {
   public sponsorships: Sponsorship[];
   public selectedSponsorship: Sponsorship = null;
   public supporter: Supporter;
-  public form: FormGroup;
+  sponsorshipCtl: FormControl = new FormControl('', [Validators.required]); 
+  fileCtl: FormControl = new FormControl('', [Validators.required])
+  public form = this.fb.group({
+    sponsorship: this.sponsorshipCtl,
+    file: this.fileCtl
+  });
   public uploadProgress: boolean;
   public uploadComplete = false;
 
@@ -33,25 +38,22 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.createForm();
+    this.sponsorshipCtl.valueChanges.subscribe(change => {
+      this.selectedSponsorship = change;
+      this.sponsorshipChange();
+    });
     this.reachService.getAllSponsorships()
       .subscribe(supporters => this.sponsorships = supporters.sort((a, b) => ('' + a.title).localeCompare(b.title)));
-  }
-
-  public sponsorshipChange() {
-    if (this.selectedSponsorship) {
-      this.reachService.getSupporters(this.selectedSponsorship)
-        .subscribe(supporters => {
-          if (supporters.length > 0) {
-            this.supporter = supporters[0];
-          }
-        });
-    }
   }
 
   public save(): Promise<boolean> {
     console.log('SAVE CLICKED');
     return new Promise<boolean>((resolve, reject) => {
+      console.log('IS FORM VALID? ', this.form.valid);
+      console.log('FILE TO UPLOAD: ', this.fileToUpload);
+      console.log('THE FORM: ', this.form.status);
+      console.log('FORM SPONSORSHIP: ', this.sponsorshipCtl.value);
+      console.log('FORM FILE: ', this.fileCtl.value);
       if (!this.form.valid) {
         console.log('SAVE CLICKED IF');
         resolve(false);
@@ -87,15 +89,14 @@ export class UploadViewComponent implements OnInit {
     }
   }
 
-  private createForm(): void {
-    const sponsorshipCtl: FormControl = new FormControl('', [Validators.required]);
-    sponsorshipCtl.valueChanges.subscribe(change => {
-      this.selectedSponsorship = change;
-      this.sponsorshipChange();
-    });
-    this.form = this.fb.group({
-      sponsorship: sponsorshipCtl,
-      file: new FormControl('', [Validators.required])
-    });
+  public sponsorshipChange() {
+    if (this.selectedSponsorship) {
+      this.reachService.getSupporters(this.selectedSponsorship)
+        .subscribe(supporters => {
+          if (supporters.length > 0) {
+            this.supporter = supporters[0];
+          }
+        });
+    }
   }
 }
