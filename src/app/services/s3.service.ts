@@ -11,7 +11,7 @@ export class S3Service {
   ) {}
 
 
-  private initS3() {
+  private initS3(): AWS.S3 {
     AWS.config.update({
       region: 'us-east-2'
     });
@@ -40,14 +40,13 @@ export class S3Service {
       ContentType: file.type
     };
     console.log('uploadToS3 s3 params', params);
-    this.initS3();
-    // .putObject(params).send((err, data) => {
-    //   if (err) {
-    //     console.log(err, err.stack);
-    //   } else {
-    //     result.next();
-    //   }
-    // });
+    this.initS3().putObject(params).send((err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        result.next();
+      }
+    });
 
     return result;
   } 
