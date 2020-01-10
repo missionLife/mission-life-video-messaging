@@ -16,7 +16,7 @@ export class S3Service {
       region: 'us-east-2'
     });
     const s3 = new AWS.S3();
-
+    console.log('the s3 instance credentials', s3.config.credentials);
     return s3;
   }
 

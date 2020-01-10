@@ -50,12 +50,17 @@ export class UploadViewComponent implements OnInit {
   }
 
   public save(): Promise<boolean> {
+    console.log('SAVE CLICKED');
     return new Promise<boolean>((resolve, reject) => {
       if (!this.form.valid) {
+        console.log('SAVE CLICKED IF');
         resolve(false);
       } else {
+        console.log('SAVE CLICKED ELSE');
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
+        console.log('SAVE CLICKED fileToUpload', this.fileToUpload);
         if (this.fileToUpload != null) {
+          console.log('SAVE CLICKED fileToUpload does NOT === null');
           this.uploadProgress = true;
           this.S3Service.uploadS3File(this.fileToUpload, metadata)
             .subscribe(() => {
