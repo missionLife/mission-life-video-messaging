@@ -16,7 +16,7 @@ export class S3Service {
       region: 'us-east-2'
     });
     const s3 = new AWS.S3();
-    console.log('the s3 instance credentials', s3.config.credentials);
+
     return s3;
   }
 
@@ -39,7 +39,7 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('uploadToS3 s3 params', params);
+
     this.initS3().putObject(params).send((err, data) => {
       if (err) {
         console.log(err, err.stack);
