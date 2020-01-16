@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
-import * as sanitize from 'sanitize-filename';
+const sanitize = require('sanitize-filename');
 
 @Injectable()
 export class S3Service {

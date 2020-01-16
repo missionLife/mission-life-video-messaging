@@ -10,13 +10,14 @@ import { Observable } from 'rxjs';
 
 const INVALID_CREDENTIALS_ERROR_MESSAGES = {
   'User does not exist.': 'Invalid Username or Password'
-}
+};
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
+
 export class LoginFormComponent implements OnInit {
   state$: Observable<object>;
   emailVerificationMessage: boolean = false;

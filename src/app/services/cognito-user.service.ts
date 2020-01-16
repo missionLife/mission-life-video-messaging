@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
-import * as AWS from "aws-sdk";
 import { CognitoCallback } from '../services/authorization.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthorizationService } from './authorization.service';
@@ -24,8 +23,7 @@ export class CognitoUserService {
   authToken: string;
 
   constructor(
-    private auth: AuthorizationService,
-    private cookieService: CookieService
+    private auth: AuthorizationService
   ) {}
 
   newPassword(newPasswordUser: NewPasswordUser, callback: CognitoCallback): void {
@@ -62,6 +60,7 @@ export class CognitoUserService {
             });
           },
           onFailure: function (err) {
+            console.log('Cognito User Service Error: ', err);
             callback.cognitoCallback(err, null);
           }
         });

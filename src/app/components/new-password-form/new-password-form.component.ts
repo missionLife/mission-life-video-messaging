@@ -5,11 +5,20 @@ import { CognitoUserService, NewPasswordUser } from '../../services/cognito-user
 import { AuthorizationService } from '../../services/authorization.service';
 import { CookieService } from 'ngx-cookie-service';
 
+const INVALID_CREDENTIALS_ERROR_MESSAGES = {
+  'Incorrect username or password.': 'Incorrect Old Password',
+  'Password does not conform to policy: Password must have uppercase characters': 'Password must have uppercase characters',
+  'Password does not conform to policy: Password must have lowercase characters': 'Password must have lowercase characters',
+  'Password does not conform to policy: Password must have numeric characters': 'Password must have numeric characters',
+  'Password does not conform to policy: Password not long enough': 'Password not long enough',
+};
+
 @Component({
   selector: 'app-new-password-form',
   templateUrl: './new-password-form.component.html',
   styleUrls: ['./new-password-form.component.scss']
 })
+
 export class NewPasswordFormComponent implements OnInit {
   username: string;
   newPasswordUser: NewPasswordUser;
@@ -46,9 +55,9 @@ export class NewPasswordFormComponent implements OnInit {
     this.cognitoUserService.newPassword(this.newPasswordUser, this);
   }
 
-  cognitoCallback(message: string, result: any) {
-    if (message != null) { //error
-      this.errorMessage = message;
+  cognitoCallback(error: Error, result: any) {
+    if (error != null) { //error
+      this.errorMessage = INVALID_CREDENTIALS_ERROR_MESSAGES[error.message] || error.message;
     } else { //success
       this.router.navigate(['/upload']);
     }
