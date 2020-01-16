@@ -74,9 +74,7 @@ export class AuthorizationService {
             cognitoUser.refreshSession(refreshToken, (err, session) => {
               if(err) {
                 console.log(err);
-              } 
-              else {
-                
+              } else {
                 const newToken = session.getIdToken().getJwtToken();
                 that.authToken = newToken;
                 
