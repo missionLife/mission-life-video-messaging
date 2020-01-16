@@ -42,7 +42,7 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('the PARAMS: ', params);
+    
     this.initS3().putObject(params).send((err, data) => {
       if (err) {
         console.log(err, err.stack);
