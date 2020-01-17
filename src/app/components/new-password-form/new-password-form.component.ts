@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CognitoUserService, NewPasswordUser } from '../../services/cognito-user.service';
+import { CognitoUserService } from '../../services/cognito-user.service';
+import { NewPasswordUser } from '../../models/new-password-user';
 import { AuthorizationService } from '../../services/authorization.service';
 import { CookieService } from 'ngx-cookie-service';
-
-const INVALID_CREDENTIALS_ERROR_MESSAGES = {
-  'Incorrect username or password.': 'Incorrect Old Password',
-  'Password does not conform to policy: Password must have uppercase characters': 'Password must have uppercase characters',
-  'Password does not conform to policy: Password must have lowercase characters': 'Password must have lowercase characters',
-  'Password does not conform to policy: Password must have numeric characters': 'Password must have numeric characters',
-  'Password does not conform to policy: Password not long enough': 'Password not long enough',
-};
+import { AWSError } from '../../models/aws-error';
 
 @Component({
   selector: 'app-new-password-form',
@@ -57,7 +51,7 @@ export class NewPasswordFormComponent implements OnInit {
 
   cognitoCallback(error: Error, result: any) {
     if (error != null) { //error
-      this.errorMessage = INVALID_CREDENTIALS_ERROR_MESSAGES[error.message] || error.message;
+      this.errorMessage = new AWSError(error.message).message || error.message;
     } else { //success
       this.router.navigate(['/upload']);
     }

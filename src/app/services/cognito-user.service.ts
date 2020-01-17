@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
-import { CognitoCallback } from '../services/authorization.service';
-import { CookieService } from 'ngx-cookie-service';
+import { CognitoCallback } from '../models/cognito-callback';
 import { AuthorizationService } from './authorization.service';
+import { NewPasswordUser } from '../models/new-password-user';
 
 const poolData = {
   UserPoolId: 'us-east-2_laC3yucNE', // Your user pool id here
@@ -10,12 +10,6 @@ const poolData = {
 };
 
 const userPool = new CognitoUserPool(poolData);
-
-export class NewPasswordUser {
-  username: string;
-  existingPassword: string;
-  password: string;
-}
 
 @Injectable()
 export class CognitoUserService {
@@ -30,8 +24,8 @@ export class CognitoUserService {
     const that = this;
 
     let authenticationData = {
-        Username: newPasswordUser.username,
-        Password: newPasswordUser.existingPassword,
+      Username: newPasswordUser.username,
+      Password: newPasswordUser.existingPassword,
     };
     let authenticationDetails = new AuthenticationDetails(authenticationData);
 

@@ -7,10 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from "../../services/authorization.service";
 import { Observable } from 'rxjs';
-
-const INVALID_CREDENTIALS_ERROR_MESSAGES = {
-  'User does not exist.': 'Invalid Username or Password'
-};
+import { AWSError } from '../../models/aws-error';
 
 @Component({
   selector: 'app-login-form',
@@ -43,16 +40,14 @@ export class LoginFormComponent implements OnInit {
     this.auth.signIn(email, password, this).subscribe((data) => {
       this.router.navigateByUrl('/');
     }, (error)=> {
-      this.error = INVALID_CREDENTIALS_ERROR_MESSAGES[error.message] || error.message;
+      this.error = new AWSError(error.message).message || error.message;
       this.emailVerificationMessage = true;
     });   
   }
 
-  cognitoCallback(message: string, result: any) {
-    if (message != null) { //error
-        this.errorMessage = message;
-        console.log("result: " + this.errorMessage);
-        if (this.errorMessage === 'User needs to set password.') {
+  cognitoCallback(error: Error, result: any) {
+    if (error.message != null) { //error
+        if (error.message === 'User needs to set password.') {
             console.log("redirecting to set new password");
             this.router.navigate(['/newPassword'], { 
               state: { 
@@ -61,6 +56,8 @@ export class LoginFormComponent implements OnInit {
                 }
               }
             });
+        } else {
+          this.errorMessage = new AWSError(error.message).message;
         }
     } else { //success
         this.router.navigate(['/upload']);

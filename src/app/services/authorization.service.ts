@@ -4,6 +4,7 @@ import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cogn
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { CognitoCallback } from '../models/cognito-callback';
 
 const poolData = {
   UserPoolId: 'us-east-2_laC3yucNE', // Your user pool id here
@@ -11,10 +12,6 @@ const poolData = {
 };
 
 const userPool = new CognitoUserPool(poolData);
-
-export interface CognitoCallback {
-  cognitoCallback(message: string, result: any): void;
-}
 
 @Injectable()
 export class AuthorizationService {
@@ -136,7 +133,7 @@ export class AuthorizationService {
           observer.error(err);
         },
         newPasswordRequired: function(userAttributes, requiredAttributes) {
-          callback.cognitoCallback(`User needs to set password.`, null);
+          callback.cognitoCallback(new Error(`User needs to set password.`), null);
           observer.complete();
         }
       });
