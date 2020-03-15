@@ -18,7 +18,6 @@ export class NewPasswordFormComponent implements OnInit {
   newPasswordUser: NewPasswordUser;
   errorMessage: string;
   form: FormGroup = new FormGroup({
-    existingPassword: new FormControl(''),
     password: new FormControl(''),
   });
 
@@ -26,7 +25,7 @@ export class NewPasswordFormComponent implements OnInit {
     private auth: AuthorizationService,
     private cognitoUserService: CognitoUserService,
     private cookieService: CookieService,
-    private router: Router,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -39,10 +38,11 @@ export class NewPasswordFormComponent implements OnInit {
   }
 
   registerNewPassword() {
+    const currentPassword = window.history.state.data.currentUserPassword;
     this.errorMessage = null;
     this.newPasswordUser = {
       username: this.username,
-      existingPassword: this.form.value.existingPassword,
+      existingPassword: currentPassword,
       password: this.form.value.password
     };
 

@@ -40,6 +40,7 @@ export class UploadViewComponent implements OnInit {
   ngOnInit() {
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
+      console.log('the selected sponsorship: ', this.selectedSponsorship);
       this.sponsorshipChange();
     });
     this.reachService.getAllSponsorships()
