@@ -15,7 +15,7 @@
 
   <form [formGroup]="form" (ngSubmit)="save()" *ngIf="sponsorships && !uploadProgress">
     <mat-form-field>
-      <mat-select id="sponsorship-select" placeholder="Select a sponsorship" *ngIf="sponsorships" formControlName="sponsorship">
+      <mat-select (blur)="checkAuth()" id="sponsorship-select" placeholder="Select a sponsorship" *ngIf="sponsorships" formControlName="sponsorship">
         <mat-option *ngFor="let sponsorship of sponsorships" [value]="sponsorship">{{sponsorship.title}}</mat-option>
       </mat-select>
     </mat-form-field>

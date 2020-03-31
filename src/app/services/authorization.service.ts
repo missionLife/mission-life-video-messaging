@@ -32,7 +32,6 @@ export class AuthorizationService {
   }
 
   inItAuth() {
-    this.cognitoUser = this.getAuthenticatedUser();
     const that = this;
     const token = this.cookieService.get('mlosc');
 
@@ -49,7 +48,7 @@ export class AuthorizationService {
       region: 'us-east-2',
       credentials: awsCredentials
     });
-
+    
     const cognitoUser = this.cognitoUser;
     if (cognitoUser) {
       cognitoUser.getSession(function(err, result) {
@@ -68,6 +67,7 @@ export class AuthorizationService {
           const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
           
           if (needsRefresh) {
+            console.log('refreshing??????')
             cognitoUser.refreshSession(refreshToken, (err, session) => {
               if(err) {
                 console.log(err);
@@ -141,12 +141,18 @@ export class AuthorizationService {
   }
 
   isLoggedIn() {
-    return userPool.getCurrentUser() != null && this.authToken;
+    return userPool.getCurrentUser() != null && this.getAuthToken();
+  }
+
+  getAuthToken() {
+    return this.cookieService.get('mlosc');
   }
 
   getAuthenticatedUser() {
     // gets the current user from the local storage
-    return userPool.getCurrentUser() || this.cognitoUser;
+    if (this.isLoggedIn()) {
+      return userPool.getCurrentUser() || this.cognitoUser;
+    }
   }
 
   logOut() {

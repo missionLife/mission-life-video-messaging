@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
-const sanitize = require('sanitize-filename');
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class S3Service {
@@ -10,7 +10,6 @@ export class S3Service {
   constructor(
     private auth: AuthorizationService
   ) {}
-
 
   private initS3(): AWS.S3 {
     AWS.config.update({
@@ -26,17 +25,14 @@ export class S3Service {
     metadata
   ): Observable<any> {
 
-    
     const result = new Subject();
-
-    const partner = sanitize(metadata.partner.split(' ').join(''));
-    const fileName = sanitize(file.name).replace(/\s/g, '_');
-    const timestamp = metadata.upload.toDateString().replace(/\s/g, '_');
+    const partner = metadata.partner.split(' ').join('');
+    const uniqueKeyId = uuidv4();
 
     const params = {
       Body: file,
       Bucket: 'mission-life-youtube-data-api-upload',
-      Key: `${partner}/${fileName}_${timestamp}`,
+      Key: `${partner}/${uniqueKeyId}`,
       Metadata: {
         'person-metadata': JSON.stringify(metadata)
       },

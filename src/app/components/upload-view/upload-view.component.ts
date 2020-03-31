@@ -10,6 +10,8 @@ import { Supporter } from '../../models/supporter';
 import { Sponsorship } from '../../models/sponsorship';
 import { MetadataService } from '../../services/metadata.service';
 import { S3Service } from '../../services/s3.service';
+import { AuthorizationService } from '../../services/authorization.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-view',
@@ -32,15 +34,16 @@ export class UploadViewComponent implements OnInit {
   fileToUpload: File = null;
 
   constructor(
+    private auth: AuthorizationService,
     private fb: FormBuilder,
-    private reachService: ReachService, 
+    private reachService: ReachService,
+    private router: Router,
     private S3Service: S3Service
   ) { }
 
   ngOnInit() {
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
-      console.log('the selected sponsorship: ', this.selectedSponsorship);
       this.sponsorshipChange();
     });
     this.reachService.getAllSponsorships()
@@ -68,6 +71,13 @@ export class UploadViewComponent implements OnInit {
         resolve(true);
       }
     });
+  }
+
+  checkAuth() {
+    const isLoggedIn = this.auth.isLoggedIn();
+    if (!isLoggedIn) {
+      this.router.navigate(['/login'])
+    }
   }
 
   public handleFileInput(files: FileList) {
