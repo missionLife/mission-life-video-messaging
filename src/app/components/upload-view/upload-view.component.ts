@@ -96,6 +96,7 @@ export class UploadViewComponent implements OnInit {
         this.errorMessage = `
           Your video is longer than 1 minute. Please select a shorter video
         `;
+        this.fileToUpload = null;
       }
     };
   }
