@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthorizationService } from '../../services/authorization.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -9,16 +10,18 @@ import { Router } from '@angular/router';
 })
 export class NavigationBarComponent implements OnInit {
 
+  $loggedIn: Observable<boolean>
+
   constructor(
     private auth: AuthorizationService,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.$loggedIn = this.auth.isUserLoggedIn;
   }
 
   logOut() {
-    console.log('logging out')
     this.auth.logOut();
     this.router.navigate(['/login']);
     return;

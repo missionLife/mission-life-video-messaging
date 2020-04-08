@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as AWS from 'aws-sdk';
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { CognitoCallback } from '../models/cognito-callback';
 
@@ -19,6 +19,7 @@ export class AuthorizationService {
   cognitoUser: any;
   authToken: string | null;
   configObservable = new Subject<boolean>();
+  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   
   constructor(
     private cookieService: CookieService,
@@ -48,6 +49,10 @@ export class AuthorizationService {
       region: 'us-east-2',
       credentials: awsCredentials
     });
+
+    if (token) {
+      this.loggedIn.next(true);
+    }
     
     const cognitoUser = this.cognitoUser;
     if (cognitoUser) {
@@ -118,21 +123,20 @@ export class AuthorizationService {
 
     const cognitoUser = new CognitoUser(userData);
     this.cognitoUser = cognitoUser;
-    const that = this;
     
     return Observable.create(observer => {
       cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: function (result) {
-
-          that.inItAuth();
+        onSuccess: (result) => {
+          this.loggedIn.next(true);
+          this.inItAuth();
           observer.next(result);
           observer.complete();
         },
-        onFailure: function(err) {
+        onFailure: (err) => {
           console.log(err);
           observer.error(err);
         },
-        newPasswordRequired: function(userAttributes, requiredAttributes) {
+        newPasswordRequired: (userAttributes, requiredAttributes) => {
           callback.cognitoCallback(new Error(`User needs to set password.`), null);
           observer.complete();
         }
@@ -143,6 +147,10 @@ export class AuthorizationService {
   isLoggedIn() {
     return userPool.getCurrentUser() != null && this.getAuthToken();
   }
+
+  get isUserLoggedIn(){
+    return this.loggedIn.asObservable();
+  } 
 
   getAuthToken() {
     return this.cookieService.get('mlosc');
@@ -160,6 +168,7 @@ export class AuthorizationService {
     this.cookieService.delete('mlosc');
     this.authToken = null;
     this.cognitoUser = null;
+    this.loggedIn.next(false);
   }
 
 }

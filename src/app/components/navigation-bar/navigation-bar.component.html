@@ -1,4 +1,4 @@
 <nav>
   <img src="../../assets/mission-life-logo.png" />
-  <button mat-flat-button color="primary" (click)="logOut()">Log Out</button>
+  <button *ngIf="$loggedIn | async as loggedIn" mat-flat-button color="primary" (click)="logOut()">Log Out</button>
 </nav>

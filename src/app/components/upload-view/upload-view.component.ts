@@ -85,7 +85,8 @@ export class UploadViewComponent implements OnInit {
     const video = document.createElement('video');
     var fileURL = URL.createObjectURL(files[0]);
     video.src = fileURL;
-    
+    video.preload = 'metadata';
+
     video.ondurationchange = () => {
       console.log('THE LENGTH OF THE VIDEO', video.duration);
       if (video.duration < 61) {
