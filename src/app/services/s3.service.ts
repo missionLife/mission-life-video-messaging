@@ -39,9 +39,9 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    
+    console.log('Calling Upload');
     this.initS3().upload(params).on('httpUploadProgress', progress => {
-      console.log('the progress: ', progress);
+      console.log('the progress updated: ', progress);
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
       if (err) {
