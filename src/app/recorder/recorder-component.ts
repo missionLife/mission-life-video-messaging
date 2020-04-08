@@ -32,6 +32,7 @@ export class RecorderComponent implements OnInit {
   public pauseButtonDisabled: boolean;
   public resumeButtonDisabled: boolean;
   public saveButtonDisabled: boolean;
+  public uploadProgress: number;
 
   public numTakes: number;  // number of takes so far
 
@@ -140,7 +141,7 @@ export class RecorderComponent implements OnInit {
     const blob = generatedBlob;
     const fileToUpload: File = new File([blob], 'blob' + Date.now());
     const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-    this.s3Service.uploadS3File(fileToUpload, metadata);
+    this.s3Service.uploadS3File(fileToUpload, metadata, progress => this.uploadProgress = progress);
 
     this.saveButtonDisabled = true;
 

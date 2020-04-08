@@ -22,7 +22,8 @@ export class S3Service {
 
   uploadS3File(
     file,
-    metadata
+    metadata,
+    progressCallback: (progress: number) => void
   ): Observable<any> {
 
     const result = new Subject();
@@ -39,7 +40,9 @@ export class S3Service {
       ContentType: file.type
     };
     
-    this.initS3().putObject(params).send((err, data) => {
+    this.initS3().putObject(params).on('httpUploadProgress', progress => {
+      progressCallback(Math.round(progress.loaded / progress.total * 100));
+    }).send((err, data) => {
       if (err) {
         console.log(err, err.stack);
       } else {

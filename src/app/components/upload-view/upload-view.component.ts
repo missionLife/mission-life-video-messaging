@@ -28,7 +28,7 @@ export class UploadViewComponent implements OnInit {
     sponsorship: this.sponsorshipCtl,
     file: this.fileCtl
   });
-  public uploadProgress: boolean;
+  public uploadProgress: number;
   public uploadComplete = false;
   fileToUpload: File = null;
   errorMessage: string;
@@ -59,10 +59,9 @@ export class UploadViewComponent implements OnInit {
       } else {
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         if (this.fileToUpload != null) {
-          this.uploadProgress = true;
-          this.S3Service.uploadS3File(this.fileToUpload, metadata)
+          this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => this.uploadProgress = progress)
             .subscribe(() => {
-              this.uploadProgress = false;
+              this.uploadProgress = null;
               this.selectedSponsorship = null;
               this.uploadComplete = true;
               this.form.reset();
