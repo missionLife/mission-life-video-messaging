@@ -30,8 +30,8 @@ export class UploadViewComponent implements OnInit {
   });
   public uploadProgress: boolean;
   public uploadComplete = false;
-
   fileToUpload: File = null;
+  errorMessage: string;
 
   constructor(
     private auth: AuthorizationService,
@@ -44,10 +44,12 @@ export class UploadViewComponent implements OnInit {
   ngOnInit() {
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
-      this.sponsorshipChange();
     });
-    this.reachService.getAllSponsorships()
-      .subscribe(supporters => this.sponsorships = supporters.sort((a, b) => ('' + a.title).localeCompare(b.title)));
+    this.reachService.getSponsorships(this.auth.getAuthToken())
+      .subscribe(res => {
+        this.sponsorships = res.sponsorships.sort((a, b) => ('' + a.title).localeCompare(b.title));
+        this.supporter = res.supporterName;
+      });
   }
 
   public save(): Promise<boolean> {
@@ -81,23 +83,26 @@ export class UploadViewComponent implements OnInit {
   }
 
   public handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0); /* now you can work with the file list */
+    const video = document.createElement('video');
+    var fileURL = URL.createObjectURL(files[0]);
+    video.src = fileURL;
+    
+    video.ondurationchange = () => {
+      console.log('THE LENGTH OF THE VIDEO', video.duration);
+      if (video.duration < 61) {
+        this.fileToUpload = files.item(0); /* now you can work with the file list */
+        this.errorMessage = null;
+      } else {
+        this.errorMessage = `
+          Your video is longer than 1 minute. Please select a shorter video
+        `;
+      }
+    };
   }
 
   public selectFileClick(event: any) {
     if (!this.selectedSponsorship) {
       event.preventDefault();
-    }
-  }
-
-  public sponsorshipChange() {
-    if (this.selectedSponsorship) {
-      this.reachService.getSupporters(this.selectedSponsorship)
-        .subscribe(supporters => {
-          if (supporters.length > 0) {
-            this.supporter = supporters[0];
-          }
-        });
     }
   }
 }

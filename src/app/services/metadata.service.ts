@@ -18,7 +18,7 @@ export class MetadataService {
   }
 
   private static getSupporterTag(supporter: Supporter) {
-    return supporter.supporter.name;
+    return supporter;
   }
 
   private static getSponsorshipTag(sponsorship: Sponsorship) {

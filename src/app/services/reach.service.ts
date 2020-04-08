@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Sponsorship } from '../models/sponsorship';
 import { Observable, Subject } from 'rxjs';
 import { Supporter } from '../models/supporter';
+import { environment } from '../../environments/environment';
 
+const MISSION_LIFE_SPONSORSHIP_API = environment.missionLifeSponsorshipAPI;
 const REACH_URL = 'https://missionlife.reachapp.co/api/v1';
 const HTTP_OPTIONS = {
   headers: {
@@ -16,29 +18,17 @@ const HTTP_OPTIONS = {
 export class ReachService {
   constructor(private http: HttpClient) { }
 
-  public getAllSponsorships(): Observable<Sponsorship[]> {
-    const sponsorships = [];
-    const result = new Subject<Sponsorship[]>();
-
-    this.getSponsorships(1, sponsorships, () => {
-      result.next(sponsorships);
-    });
-
-    return result;
+  public getSponsorships(authToken: string) {
+    let options = {
+      headers: {
+        Authorization: authToken
+      }
+    };
+    return this.http.get<any>(`${MISSION_LIFE_SPONSORSHIP_API}/sponsorships`, options);
   }
 
   public getSupporters(sponsorship: Sponsorship): Observable<Supporter[]> {
+    console.log('MISSION_LIFE_SPONSORSHIP_API: ', MISSION_LIFE_SPONSORSHIP_API);
     return this.http.get<any[]>(`${REACH_URL}/sponsorships/${sponsorship.id}/sponsors`, HTTP_OPTIONS);
-  }
-
-  public getSponsorships(pageNumber: number, sponsorships: Sponsorship[], callback: () => void) {
-    return this.http.get<Sponsorship[]>(`${REACH_URL}/sponsorships?page=${pageNumber}&per_page=200`, HTTP_OPTIONS).subscribe(results => {
-      if (results.length > 0) {
-        sponsorships.push(...results);
-        this.getSponsorships(pageNumber + 1, sponsorships, callback);
-      } else {
-        callback();
-      }
-    });
   }
 }

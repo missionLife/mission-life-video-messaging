@@ -20,16 +20,8 @@
       </mat-select>
     </mat-form-field>
 
-    <div class="sponsorship-info" *ngIf="selectedSponsorship">
-      <div>
-        <label>Supporter:</label>
-        <span *ngIf="supporter">{{supporter?.supporter.name}}</span>
-      </div>
-
-      <div>
-        <label>Partner:</label>
-        <span *ngIf="selectedSponsorship">{{supporter?.sponsorship.place.title}}</span>
-      </div>
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
     </div>
 
     <div>
