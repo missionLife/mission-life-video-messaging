@@ -41,6 +41,7 @@ export class S3Service {
     };
     
     this.initS3().putObject(params).on('httpUploadProgress', progress => {
+      console.log('the progress: ', progress);
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
       if (err) {
