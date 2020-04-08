@@ -40,7 +40,7 @@ export class S3Service {
       ContentType: file.type
     };
     
-    this.initS3().putObject(params).on('httpUploadProgress', progress => {
+    this.initS3().upload(params).on('httpUploadProgress', progress => {
       console.log('the progress: ', progress);
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
