@@ -1,7 +1,9 @@
 <div class="container" *ngIf="uploadComplete">
-  <mat-chip-list>
-    <mat-chip color="accent" selected>Upload complete!</mat-chip>
-  </mat-chip-list>
+  <div class="upload-complete-text">
+    Thank you for your video! We are now translating
+    and close captioning your video before sending it 
+    on to your sponsorship.
+  </div>
 
   <button mat-raised-button color="primary" (click)="uploadComplete = false">Continue</button>
 </div>
