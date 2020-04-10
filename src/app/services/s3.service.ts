@@ -11,11 +11,12 @@ export class S3Service {
     private auth: AuthorizationService
   ) {}
 
-  private initS3(): AWS.S3 {
+  private initS3(params): AWS.S3.ManagedUpload {
     AWS.config.update({
       region: 'us-east-2'
     });
-    const s3 = new AWS.S3();
+    console.log('Calling Upload 5 PARAMS: ', params);
+    const s3 = new AWS.S3.ManagedUpload({params});
 
     return s3;
   }
@@ -39,14 +40,9 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('Calling Upload 3');
+    console.log('Calling Upload 5 uploadS3File params: ', params);
 
-    const options = {
-      partSize: 5 * 1024 * 1024,
-      queueSize: 1,
-    };
-
-    const request = this.initS3().upload(params, options).on('httpUploadProgress', function(progress) {
+    const request = this.initS3(params).on('httpUploadProgress', function(progress) {
       console.log('the progress updated: ', progress);
       return progressCallback(Math.round(progress.loaded / progress.total * 100));
     });
