@@ -39,8 +39,14 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('Calling Upload 2');
-    const request = this.initS3().upload(params).on('httpUploadProgress', function(progress) {
+    console.log('Calling Upload 3');
+
+    const options = {
+      partSize: 2 * 1024 * 1024,
+      queueSize: 1,
+    };
+
+    const request = this.initS3().upload(params, options).on('httpUploadProgress', function(progress) {
       console.log('the progress updated: ', progress);
       return progressCallback(Math.round(progress.loaded / progress.total * 100));
     });
