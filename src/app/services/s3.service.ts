@@ -25,7 +25,6 @@ export class S3Service {
   uploadFile(file, metadata): Observable<any> {
 
     return new Observable<any>((observer) => {
-      
 
       const partner = metadata.partner.split(' ').join('');
       const uniqueKeyId = uuidv4();
@@ -45,7 +44,15 @@ export class S3Service {
         partSize: 64*1024*1024,
       };
 
-      this.initS3().putObject(params, (err, data) => {}).on('httpUploadProgress', (progress: ProgressEvent) => console.log(`progress - ${progress}`));
+      this.initS3().putObject(params, (err, data) => {
+        if (err) {
+          console.log('Error uploading: ', err);
+        } 
+        observer.complete();
+      }).on('httpUploadProgress', (progress: ProgressEvent) => {
+        console.log(`progress - ${progress}`);
+        observer.next(progress);
+      });
     });
   }
 }
