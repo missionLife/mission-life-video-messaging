@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
 import { v4 as uuidv4 } from 'uuid';
 
+
 @Injectable()
 export class S3Service {
 
@@ -52,5 +53,36 @@ export class S3Service {
     });
 
     return result;
-  } 
+  }
+  
+  uploadFile(file, metadata): Observable<any> {
+
+    return new Observable<any>((observer) => {
+
+      const partner = metadata.partner.split(' ').join('');
+      const uniqueKeyId = uuidv4();
+
+      const params = {
+        Body: file,
+        Bucket: 'mission-life-youtube-data-api-upload',
+        Key: `${partner}/${uniqueKeyId}`,
+        Metadata: {
+          'person-metadata': JSON.stringify(metadata)
+        },
+        ContentType: file.type
+      };
+
+      this.initS3().upload(params, function (err, data) {
+        if (err) {
+          observer.next();
+          console.log(err.stack);
+        }
+        observer.complete();
+      }).on('httpUploadProgress', function (progress) {
+        const percentage = (progress.loaded) * 100 / progress.total;
+        console.log('The Percentage: ', percentage);
+        observer.next(percentage);
+      });
+    });
+  }
 }

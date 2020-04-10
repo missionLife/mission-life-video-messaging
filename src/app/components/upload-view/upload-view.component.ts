@@ -12,6 +12,7 @@ import { MetadataService } from '../../services/metadata.service';
 import { S3Service } from '../../services/s3.service';
 import { AuthorizationService } from '../../services/authorization.service';
 import { Router } from '@angular/router';
+import { promise } from 'protractor';
 
 @Component({
   selector: 'app-upload-view',
@@ -42,6 +43,7 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('HEY 3');
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
     });
@@ -59,14 +61,19 @@ export class UploadViewComponent implements OnInit {
       } else {
         const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
         if (this.fileToUpload != null) {
-          this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => this.uploadProgress = progress)
-            .subscribe(() => {
-              this.uploadProgress = null;
-              this.selectedSponsorship = null;
-              this.uploadComplete = true;
-              this.form.reset();
-              this.fileToUpload = undefined;
-              this.supporter = undefined;
+          this.S3Service.uploadFile(this.fileToUpload, metadata)
+            .subscribe((progress) => {
+              console.log('the progress in save', progress);
+              this.uploadProgress = progress;
+              if (this.uploadProgress == 100) {
+                this.uploadProgress = null;
+                this.selectedSponsorship = null;
+                this.uploadComplete = true;
+                this.form.reset();
+                this.fileToUpload = undefined;
+                this.supporter = undefined;
+              }
+              
             });
         }
         resolve(true);
