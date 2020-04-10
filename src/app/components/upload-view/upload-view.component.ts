@@ -43,7 +43,11 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+<<<<<<< HEAD
     console.log('HEY 3');
+=======
+    console.log('YO 6');
+>>>>>>> 29b5989698d7b009db073a470add456fa49d9bec
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
     });
@@ -55,7 +59,7 @@ export class UploadViewComponent implements OnInit {
   }
 
   public save(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>( async (resolve, reject) => {
       if (!this.fileToUpload || !this.sponsorshipCtl.value) {
         resolve(false);
       } else {
