@@ -21,11 +21,11 @@ export class S3Service {
     return s3;
   }
 
-  uploadS3File(
+  async uploadS3File(
     file,
     metadata,
     progressCallback: (progress: number) => void
-  ): Observable<any> {
+  ): Promise<any> {
 
     const result = new Subject();
     const partner = metadata.partner.split(' ').join('');
@@ -40,21 +40,16 @@ export class S3Service {
       },
       ContentType: file.type
     };
-    console.log('Calling Upload 5 uploadS3File params: ', params);
+    console.log('Calling Upload 6 uploadS3File params: ', params);
 
-    const request = this.initS3(params).on('httpUploadProgress', function(progress) {
-      console.log('the progress updated: ', progress);
-      return progressCallback(Math.round(progress.loaded / progress.total * 100));
-    });
-    
-    request.send((err, data) => {
+    return this.initS3(params).on('httpUploadProgress', (event) => {
+      console.log('THE event: ', event);
+    }).send(function (err, data) {
       if (err) {
-        console.log(err, err.stack);
+        console.log('The Error: ', err);
       } else {
-        result.next();
+        return Promise.resolve({ ok: true });
       }
     });
-
-    return result;
   } 
 }
