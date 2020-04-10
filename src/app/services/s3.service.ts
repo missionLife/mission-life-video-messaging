@@ -49,10 +49,10 @@ export class S3Service {
           console.log('Error uploading: ', err);
         } 
         console.log('upload complete', data);
-        observer.complete();
+        return observer.complete();
       }).on('httpUploadProgress', (progress: ProgressEvent) => {
         console.log(`progress - ${progress}`);
-        observer.next((progress.loaded / progress.total) * 100);
+        return observer.next((progress.loaded / progress.total) * 100);
       });
     });
   }
