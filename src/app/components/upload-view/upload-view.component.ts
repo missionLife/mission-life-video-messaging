@@ -43,7 +43,7 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('HEY 5');
+    console.log('HEY 6');
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
     });
