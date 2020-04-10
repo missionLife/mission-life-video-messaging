@@ -44,7 +44,7 @@ export class S3Service {
         partSize: 64*1024*1024,
       };
 
-      this.initS3().putObject(params, (err, data) => {
+      this.initS3().upload(params, (err, data) => {
         if (err) {
           console.log('Error uploading: ', err);
         } 
