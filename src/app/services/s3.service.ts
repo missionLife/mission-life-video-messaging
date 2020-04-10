@@ -42,7 +42,7 @@ export class S3Service {
     console.log('Calling Upload 3');
 
     const options = {
-      partSize: 2 * 1024 * 1024,
+      partSize: 5 * 1024 * 1024,
       queueSize: 1,
     };
 
