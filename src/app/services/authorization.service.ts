@@ -164,7 +164,10 @@ export class AuthorizationService {
   }
 
   logOut() {
-    this.getAuthenticatedUser().signOut();
+    const user = this.getAuthenticatedUser();
+    if (user) {
+      user.signOut();
+    }
     this.cookieService.delete('mlosc');
     this.authToken = null;
     this.cognitoUser = null;

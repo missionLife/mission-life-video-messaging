@@ -45,7 +45,7 @@ export class S3Service {
         partSize: 64*1024*1024,
       };
 
-      this.initS3().putObject(params, function(err, data) {}).on('httpUploadProgress', (progress: ProgressEvent) => console.log(`progress - ${progress}`));
+      this.initS3().putObject(params, (err, data) => {}).on('httpUploadProgress', (progress: ProgressEvent) => console.log(`progress - ${progress}`));
     });
   }
 }
