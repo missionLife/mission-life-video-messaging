@@ -25,10 +25,11 @@ export class S3Service {
   uploadFile(file, metadata): Observable<any> {
 
     return new Observable<any>((observer) => {
+      
 
       const partner = metadata.partner.split(' ').join('');
       const uniqueKeyId = uuidv4();
-
+      console.log('the file: ', file);
       const params = {
         Body: file,
         Bucket: 'mission-life-youtube-data-api-upload',
@@ -39,17 +40,12 @@ export class S3Service {
         ContentType: file.type
       };
 
-      this.initS3().upload(params, function (err, data) {
-        if (err) {
-          observer.next();
-          console.log(err.stack);
-        }
-        observer.complete();
-      }).on('httpUploadProgress', function (progress) {
-        const percentage = (progress.loaded) * 100 / progress.total;
-        console.log('The Percentage: ', percentage);
-        observer.next(percentage);
-      });
+      let options: AWS.S3.ManagedUpload.ManagedUploadOptions = {
+        params: params,
+        partSize: 64*1024*1024,
+      };
+
+      this.initS3().putObject(params, function(err, data) {}).on('httpUploadProgress', (progress: ProgressEvent) => console.log(`progress - ${progress}`));
     });
   }
 }
