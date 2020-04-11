@@ -141,7 +141,7 @@ export class RecorderComponent implements OnInit {
     const blob = generatedBlob;
     const fileToUpload: File = new File([blob], 'blob' + Date.now());
     const metadata = MetadataService.getVideoMetadata(this.supporter, this.selectedSponsorship);
-    this.s3Service.uploadFile(fileToUpload, metadata);
+    this.s3Service.uploadS3File(fileToUpload, metadata, (progress) => this.uploadProgress = progress);
 
     this.saveButtonDisabled = true;
 

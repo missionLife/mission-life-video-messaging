@@ -4,7 +4,6 @@ import { Observable, Subject } from 'rxjs';
 import { AuthorizationService } from '../services/authorization.service';
 import { v4 as uuidv4 } from 'uuid';
 
-
 @Injectable()
 export class S3Service {
 
@@ -16,44 +15,42 @@ export class S3Service {
     AWS.config.update({
       region: 'us-east-2'
     });
-    
     const s3 = new AWS.S3();
 
     return s3;
   }
-  
-  uploadFile(file, metadata): Observable<any> {
 
-    return new Observable<any>((observer) => {
+  uploadS3File(
+    file,
+    metadata,
+    progressCallback: (progress: number) => void
+  ): Observable<any> {
 
-      const partner = metadata.partner.split(' ').join('');
-      const uniqueKeyId = uuidv4();
-      console.log('the file: ', file);
-      const params = {
-        Body: file,
-        Bucket: 'mission-life-youtube-data-api-upload',
-        Key: `${partner}/${uniqueKeyId}`,
-        Metadata: {
-          'person-metadata': JSON.stringify(metadata)
-        },
-        ContentType: file.type
-      };
+    const result = new Subject();
+    const partner = metadata.partner.split(' ').join('');
+    const uniqueKeyId = uuidv4();
 
-      let options: AWS.S3.ManagedUpload.ManagedUploadOptions = {
-        params: params,
-        partSize: 64*1024*1024,
-      };
-
-      this.initS3().upload(params, (err, data) => {
-        if (err) {
-          console.log('Error uploading: ', err);
-        } 
-        console.log('upload complete', data);
-        return observer.complete();
-      }).on('httpUploadProgress', (progress: ProgressEvent) => {
-        console.log(`progress - ${progress}`);
-        return observer.next((progress.loaded / progress.total) * 100);
-      });
+    const params = {
+      Body: file,
+      Bucket: 'mission-life-youtube-data-api-upload',
+      Key: `${partner}/${uniqueKeyId}`,
+      Metadata: {
+        'person-metadata': JSON.stringify(metadata)
+      },
+      ContentType: file.type
+    };
+    
+    this.initS3().putObject(params).on('httpUploadProgress', progress => {
+      console.log('the progress: ', progress);
+      progressCallback(Math.round(progress.loaded / progress.total * 100));
+    }).send((err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        result.next();
+      }
     });
-  }
+
+    return result;
+  } 
 }
