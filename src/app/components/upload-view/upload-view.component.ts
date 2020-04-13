@@ -68,7 +68,6 @@ export class UploadViewComponent implements OnInit {
               this.uploadComplete = true;
               this.form.reset();
               this.fileToUpload = undefined;
-              this.supporter = undefined;
             });
         }
         resolve(true);
@@ -90,7 +89,6 @@ export class UploadViewComponent implements OnInit {
     video.preload = 'metadata';
 
     video.ondurationchange = () => {
-      console.log('THE LENGTH OF THE VIDEO', video.duration);
       if (video.duration < 5000) {
         this.fileToUpload = files.item(0); /* now you can work with the file list */
         this.errorMessage = null;
