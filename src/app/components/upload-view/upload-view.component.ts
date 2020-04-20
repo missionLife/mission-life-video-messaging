@@ -43,7 +43,7 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('HEY 3');
+    console.log('HEY 4');
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
     });
@@ -89,7 +89,7 @@ export class UploadViewComponent implements OnInit {
     video.preload = 'metadata';
 
     video.ondurationchange = () => {
-      if (video.duration < 5000) {
+      if (video.duration < 61) {
         this.fileToUpload = files.item(0); /* now you can work with the file list */
         this.errorMessage = null;
       } else {
@@ -105,5 +105,10 @@ export class UploadViewComponent implements OnInit {
     if (!this.selectedSponsorship) {
       event.preventDefault();
     }
+  }
+
+  public resetAfterSave() {
+    this.checkAuth();
+    this.uploadComplete = false;
   }
 }
