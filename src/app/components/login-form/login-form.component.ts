@@ -38,7 +38,7 @@ export class LoginFormComponent implements OnInit {
     const password = this.form.value.password;
     
     this.auth.signIn(email, password, this).subscribe((data) => {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/upload');
     }, (error)=> {
       this.error = new AWSError(error.message).message || error.message;
       this.emailVerificationMessage = true;
