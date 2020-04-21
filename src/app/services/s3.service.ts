@@ -40,7 +40,11 @@ export class S3Service {
       ContentType: file.type
     };
     
-    this.initS3().putObject(params).on('httpUploadProgress', (progress) => {
+    const req = this.initS3().putObject(params);
+    
+    req.httpRequest.headers['ngsw-bypass'] = 'true';
+    
+    req.on('httpUploadProgress', (progress) => {
       progressCallback(Math.round(progress.loaded / progress.total * 100));
     }).send((err, data) => {
       if (err) {
