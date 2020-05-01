@@ -137,6 +137,7 @@ export class AuthorizationService {
           observer.error(err);
         },
         newPasswordRequired: (userAttributes, requiredAttributes) => {
+          this.loggedIn.next(true);
           callback.cognitoCallback(new Error(`User needs to set password.`), null);
           observer.complete();
         }
@@ -145,7 +146,7 @@ export class AuthorizationService {
   }
 
   isLoggedIn() {
-    return userPool.getCurrentUser() != null && this.getAuthToken();
+    return this.loggedIn.value;
   }
 
   get isUserLoggedIn(){

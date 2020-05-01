@@ -37,7 +37,7 @@ export class NewPasswordFormComponent implements OnInit {
     });
     const currentUser = this.auth.getAuthenticatedUser();
     const token = this.cookieService.get('mlosc');
-    this.username = currentUser.username;
+
     if (currentUser && token) {
       this.router.navigate(['/upload']);
     }
@@ -51,8 +51,11 @@ export class NewPasswordFormComponent implements OnInit {
       return;
     }
 
+    this.username = window.history.state.data.currentUserEmail;
     const currentPassword = window.history.state.data.currentUserPassword;
     this.errorMessage = null;
+
+    console.log('this.username: ', this.username);
 
     this.newPasswordUser = {
       username: this.username,
