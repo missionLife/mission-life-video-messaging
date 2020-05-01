@@ -65,7 +65,15 @@ export class AuthorizationService {
           const oneHourFromNow = new Date;
           oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
           // Store Token in Cookies
-          that.cookieService.set('mlosc', token, oneHourFromNow);
+          that.cookieService.set(
+            'mlosc',
+            token,
+            oneHourFromNow,
+            '/',
+            'd1s3z7p9p47ieq.cloudfront.net', 
+            true, 
+            "Strict"
+          );
   
           const refreshToken = result.getRefreshToken();
           
