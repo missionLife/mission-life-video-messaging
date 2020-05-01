@@ -72,7 +72,6 @@ export class AuthorizationService {
           const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
           
           if (needsRefresh) {
-            console.log('refreshing??????')
             cognitoUser.refreshSession(refreshToken, (err, session) => {
               if(err) {
                 console.log(err);
