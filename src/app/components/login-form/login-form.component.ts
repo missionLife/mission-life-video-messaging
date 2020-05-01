@@ -52,7 +52,7 @@ export class LoginFormComponent implements OnInit {
             this.router.navigate(['/newPassword'], { 
               state: { 
                 data: { 
-                  currentUserEmail: this.form.value.email,
+                  currentUserEmail: this.form.value.email.toLowerCase(),
                   currentUserPassword: this.form.value.password
                 }
               }
