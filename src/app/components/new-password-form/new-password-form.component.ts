@@ -55,8 +55,6 @@ export class NewPasswordFormComponent implements OnInit {
     const currentPassword = window.history.state.data.currentUserPassword;
     this.errorMessage = null;
 
-    console.log('this.username: ', this.username);
-
     this.newPasswordUser = {
       username: this.username,
       existingPassword: currentPassword,
