@@ -48,7 +48,7 @@ export class UploadViewComponent implements OnInit {
     this.reachService.getSponsorships(this.auth.getAuthToken())
       .subscribe(res => {
         this.sponsorships = res.sponsorships.sort((a, b) => ('' + a.title).localeCompare(b.title));
-        this.supporter = res.supporterName;
+        this.supporter = res;
       });
   }
 
