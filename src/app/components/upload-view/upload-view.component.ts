@@ -12,7 +12,6 @@ import { MetadataService } from '../../services/metadata.service';
 import { S3Service } from '../../services/s3.service';
 import { AuthorizationService } from '../../services/authorization.service';
 import { Router } from '@angular/router';
-import { promise } from 'protractor';
 
 @Component({
   selector: 'app-upload-view',
@@ -43,7 +42,6 @@ export class UploadViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('HEY 4');
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
     });

@@ -5,17 +5,18 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { CognitoCallback } from '../models/cognito-callback';
+import { environment } from '../../environments/environment';
 
 const poolData = {
-  UserPoolId: 'us-east-2_laC3yucNE', // Your user pool id here
-  ClientId: '55kupjfu7vnn7ogu57p3h7psmd' // Your client id here  
+  UserPoolId: environment.cognitoUserPoolId, // Your user pool id here
+  ClientId: environment.cognitoClientId // Your client id here  
 };
 
 const userPool = new CognitoUserPool(poolData);
 
 @Injectable()
 export class AuthorizationService {
-  static identityPoolId: string = 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa';
+  static identityPoolId: string = environment.cognitoIdentityPoolId;
   cognitoUser: any;
   authToken: string | null;
   configObservable = new Subject<boolean>();
@@ -35,9 +36,8 @@ export class AuthorizationService {
   inItAuth() {
     const that = this;
     const token = this.cookieService.get('mlosc');
-
     let awsCredentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: 'us-east-2:3245f703-bac7-4103-ab98-32a027009afa',
+      IdentityPoolId: environment.cognitoIdentityPoolId,
       Logins: {
         'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': token
       },
@@ -55,6 +55,7 @@ export class AuthorizationService {
     }
     
     const cognitoUser = this.cognitoUser;
+
     if (cognitoUser) {
       cognitoUser.getSession(function(err, result) {
         if (result) {
@@ -70,8 +71,8 @@ export class AuthorizationService {
             token,
             oneHourFromNow,
             '/',
-            'd1s3z7p9p47ieq.cloudfront.net', 
-            true, 
+            environment.cookieDomain, 
+            environment.cookieSecure,
             "Strict"
           );
   
@@ -88,7 +89,7 @@ export class AuthorizationService {
                 that.authToken = newToken;
                 
                 ( <any> AWS.config.credentials ).params.Logins[
-                  'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE'
+                  environment.cognitoARN
                 ] = newToken;
 
                 try {
