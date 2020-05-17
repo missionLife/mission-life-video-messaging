@@ -45,18 +45,20 @@ export class UploadViewComponent implements OnInit {
   ngOnInit() {
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
-      const isAvailable = this.selectedSponsorship.isAvailableForUpload;
-      const dateAvailableForUpload = new Date(this.selectedSponsorship.dateAvailableForUpload);
-      if (isAvailable === false) {
-        this.isAvailableForUpload = false;
-        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const timestampString = dateAvailableForUpload.toLocaleDateString("en-US", options);
-        this.errorMessage = `
-          Only 1 upload per month.  Next upload date for ${this.selectedSponsorship.title} is ${timestampString}
-        `;
-      } else {
-        this.isAvailableForUpload = true;
-        this.errorMessage = null;
+      if (this.selectedSponsorship) {
+        const isAvailable = this.selectedSponsorship.isAvailableForUpload;
+        const dateAvailableForUpload = new Date(this.selectedSponsorship.dateAvailableForUpload);
+        if (isAvailable === false) {
+          this.isAvailableForUpload = false;
+          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          const timestampString = dateAvailableForUpload.toLocaleDateString("en-US", options);
+          this.errorMessage = `
+            Only 1 upload per month.  Next upload date for ${this.selectedSponsorship.title} is ${timestampString}
+          `;
+        } else {
+          this.isAvailableForUpload = true;
+          this.errorMessage = null;
+        }
       }
     });
     this.reachService.getSponsorships(this.auth.getAuthToken())
@@ -75,6 +77,7 @@ export class UploadViewComponent implements OnInit {
         if (this.fileToUpload != null) {
           this.S3Service.uploadS3File(this.fileToUpload, metadata, progress => this.uploadProgress = progress)
             .subscribe(() => {
+              this.updateSponsorship(this.selectedSponsorship);
               this.uploadProgress = null;
               this.selectedSponsorship = null;
               this.uploadComplete = true;
@@ -91,6 +94,18 @@ export class UploadViewComponent implements OnInit {
     const isLoggedIn = this.auth.isLoggedIn();
     if (!isLoggedIn) {
       this.router.navigate(['/login'])
+    }
+  }
+
+  updateSponsorship(sponsorship: Sponsorship) {
+    for (const sponsorshipObject of this.sponsorships) {
+      if (sponsorshipObject.id === sponsorship.id) {
+        sponsorship.isAvailableForUpload = false;
+        const dateAvailableForUpload = new Date();
+        sponsorship.dateAvailableForUpload = dateAvailableForUpload.setDate(
+          dateAvailableForUpload.getDate() + 30
+        );
+      }
     }
   }
 
