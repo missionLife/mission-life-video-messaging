@@ -96,6 +96,6 @@ function getTimeLength(milliseconds) {
     return data.getUTCHours() + " hours, " + data.getUTCMinutes() + " minutes and " + data.getUTCSeconds() + " second(s)";
 }
 
-window.onbeforeunload = function () {
-    document.querySelector('#start-recording').disabled = false;
-};
+// window.onbeforeunload = function () {
+//     document.querySelector('#start-recording').disabled = false;
+// };

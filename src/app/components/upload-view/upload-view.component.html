@@ -30,7 +30,7 @@
     </div>
 
     <div>
-      <label for="file" class="mat-raised-button mat-accent" [attr.disabled]="selectedSponsorship ? null : 'disabled'" (click)="selectFileClick($event)">
+      <label for="file" class="mat-raised-button mat-accent" [attr.disabled]="selectedSponsorship && isAvailableForUpload ? null : 'disabled'" (click)="selectFileClick($event)">
         <ng-container *ngIf="fileToUpload">
           {{fileToUpload.name}}
         </ng-container>

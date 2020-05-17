@@ -32,6 +32,7 @@ export class UploadViewComponent implements OnInit {
   public uploadComplete = false;
   fileToUpload: File = null;
   errorMessage: string;
+  isAvailableForUpload: boolean;
 
   constructor(
     private auth: AuthorizationService,
@@ -44,6 +45,19 @@ export class UploadViewComponent implements OnInit {
   ngOnInit() {
     this.sponsorshipCtl.valueChanges.subscribe(change => {
       this.selectedSponsorship = change;
+      const isAvailable = this.selectedSponsorship.isAvailableForUpload;
+      const dateAvailableForUpload = new Date(this.selectedSponsorship.dateAvailableForUpload);
+      if (isAvailable === false) {
+        this.isAvailableForUpload = false;
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timestampString = dateAvailableForUpload.toLocaleDateString("en-US", options);
+        this.errorMessage = `
+          Only 1 upload per month.  Next upload date for ${this.selectedSponsorship.title} is ${timestampString}
+        `;
+      } else {
+        this.isAvailableForUpload = true;
+        this.errorMessage = null;
+      }
     });
     this.reachService.getSponsorships(this.auth.getAuthToken())
       .subscribe(res => {
@@ -100,7 +114,7 @@ export class UploadViewComponent implements OnInit {
   }
 
   public selectFileClick(event: any) {
-    if (!this.selectedSponsorship) {
+    if (!this.selectedSponsorship || !this.isAvailableForUpload) {
       event.preventDefault();
     }
   }
