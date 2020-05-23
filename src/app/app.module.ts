@@ -22,6 +22,7 @@ import { NavigationBarComponent } from './components/navigation-bar/navigation-b
 import { AuthViewComponent } from './components/auth-view/auth-view.component';
 import { UploadViewComponent } from './components/upload-view/upload-view.component';
 import { NewPasswordFormComponent } from './components/new-password-form/new-password-form.component';
+import { ResetPasswordFormComponent } from './components/reset-password-form/reset-password-form.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NewPasswordFormComponent } from './components/new-password-form/new-pas
     NavigationBarComponent,
     AuthViewComponent,
     UploadViewComponent,
-    NewPasswordFormComponent
+    NewPasswordFormComponent,
+    ResetPasswordFormComponent
   ],
   imports: [
     BrowserModule,
