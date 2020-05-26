@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { 
   FormGroup,
   FormBuilder,
@@ -33,6 +33,10 @@ export class UploadViewComponent implements OnInit {
   fileToUpload: File = null;
   errorMessage: string;
   isAvailableForUpload: boolean;
+
+  @HostListener('change', ['$event.target.files']) emitFiles( event: FileList ) {
+    this.handleFileInput(event);
+  }
 
   constructor(
     private auth: AuthorizationService,
@@ -113,9 +117,9 @@ export class UploadViewComponent implements OnInit {
     const video = document.createElement('video');
     var fileURL = URL.createObjectURL(files[0]);
     video.src = fileURL;
-    video.preload = 'metadata';
+    video.preload = 'metadata'
 
-    video.ondurationchange = () => {
+    video.addEventListener('durationchange', () => {
       if (video.duration < 61) {
         this.fileToUpload = files.item(0); /* now you can work with the file list */
         this.errorMessage = null;
@@ -125,7 +129,7 @@ export class UploadViewComponent implements OnInit {
         `;
         this.fileToUpload = null;
       }
-    };
+    });
   }
 
   public selectFileClick(event: any) {
