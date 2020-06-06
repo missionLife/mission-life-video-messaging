@@ -65,6 +65,7 @@ export class AuthorizationService {
           // Setting cookie to expire 1 hour from now
           const oneHourFromNow = new Date;
           oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
+          console.log('The Cookie Domain: ', environment.cookieDomain);
           // Store Token in Cookies
           that.cookieService.set(
             'mlosc',
