@@ -7,7 +7,7 @@ Resources:
   MissionLifeVideoMessagingBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: app
+      BucketName: app.missionlifechange.org
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: index.html

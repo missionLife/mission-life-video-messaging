@@ -30,7 +30,7 @@ scripts/cloudformation-safe-no-changes aws cloudformation deploy \
 # upload content to s3
 echo "Start uploading files"
 
-aws s3 cp ./dist/s3 s3://app/ \
+aws s3 cp ./dist/s3 s3://app.missionlifechange.org/ \
     --acl public-read \
     --recursive \
     --cache-control no-cache || true
