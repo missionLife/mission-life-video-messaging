@@ -3,7 +3,6 @@ import * as AWS from 'aws-sdk';
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
 import { CognitoCallback } from '../models/cognito-callback';
 import { environment } from '../../environments/environment';
 
@@ -33,86 +32,61 @@ export class AuthorizationService {
   }
 
   inItAuth() {
-    const that = this;
-    const token = this.cookieService.get('mlosc');
-    let awsCredentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: environment.cognitoIdentityPoolId,
-      Logins: {
-        'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': token
-      },
-    }, {
-      region: 'us-east-2'
-    });
-
-    AWS.config.update({
-      region: 'us-east-2',
-      credentials: awsCredentials
-    });
-
-    if (token) {
-      console.log('IF TOKEN - this.cognitoUser ', this.cognitoUser);
-      const user = this.getAuthenticatedUser();
-      console.log('IF TOKEN - this.getAuthenticatedUser', user);
-      this.loggedIn.next(true);
-    }
-    
-    const cognitoUser = this.cognitoUser;
-
-    if (cognitoUser) {
-      cognitoUser.getSession(function(err, result) {
-        if (result) {
-          // Get Token for AWS Cognito Creds
-          const token = result.getIdToken().getJwtToken();
-          
-          // Setting cookie to expire 1 hour from now
-          const oneHourFromNow = new Date;
-          oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
-          console.log('The Cookie Domain: ', environment.cookieDomain);
-          // Store Token in Cookies
-          that.cookieService.set(
-            'mlosc',
-            token,
-            oneHourFromNow,
-            '/',
-            environment.cookieDomain, 
-            environment.cookieSecure,
-            "Strict"
-          );
-  
-          const refreshToken = result.getRefreshToken();
-          
-          const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
-          
-          if (needsRefresh) {
-            cognitoUser.refreshSession(refreshToken, (err, session) => {
-              if(err) {
-                console.log(err);
-              } else {
-                const newToken = session.getIdToken().getJwtToken();
-                that.authToken = newToken;
-                
-                ( <any> AWS.config.credentials ).params.Logins[
-                  environment.cognitoARN
-                ] = newToken;
-
-                try {
-                  awsCredentials.clearCachedId();
-                  ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).refresh((err)=> {
-                    if (err) {
-                      console.log(err);
-                    } else {
-                      that.emitConfig(true);
-                    }
-                  });
-                } catch (e) {
-                  console.log('There was an error in the Authorization Service: ', e);
-                }
-              }
-            });
-          }
-        }
+    const cookieObject = this.cookieService.get('mlosc');
+    if (cookieObject) {
+      const { token, email } = JSON.parse(cookieObject);
+      let awsCredentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: environment.cognitoIdentityPoolId,
+        Logins: {
+          'cognito-idp.us-east-2.amazonaws.com/us-east-2_laC3yucNE': token
+        },
+      }, {
+        region: 'us-east-2'
       });
+  
+      AWS.config.update({
+        region: 'us-east-2',
+        credentials: awsCredentials
+      });
+  
+      const userData = {
+        Username : email,
+        Pool : userPool
+      };
+  
+      const cognitoUser = new CognitoUser(userData);
+      this.cognitoUser = cognitoUser;
+      this.generateUserSession(cognitoUser, email);
     }
+  }
+
+  generateUserSession(cognitoUser: CognitoUser, email: string) {
+    this.loggedIn.next(true);
+    cognitoUser.getSession((err, result) => {
+      if (result) {
+        // Get Token for AWS Cognito Creds
+        const token = result.getIdToken().getJwtToken();
+        const cookieObject = {
+          token,
+          email
+        };
+        // Setting cookie to expire 1 hour from now
+        const oneHourFromNow = new Date;
+        oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
+        // Store Token in Cookies
+        this.cookieService.set(
+          'mlosc',
+          JSON.stringify(cookieObject),
+          oneHourFromNow,
+          '/',
+          environment.cookieDomain, 
+          environment.cookieSecure,
+          "Strict"
+        );
+
+        this.emitConfig(true);
+      }
+    });
   }
 
   signIn(
@@ -136,10 +110,9 @@ export class AuthorizationService {
     this.cognitoUser = cognitoUser;
     
     return Observable.create(observer => {
-      cognitoUser.authenticateUser(authenticationDetails, {
+      this.cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          this.loggedIn.next(true);
-          this.inItAuth();
+          this.generateUserSession(cognitoUser, email);
           observer.next(result);
           observer.complete();
         },
@@ -165,7 +138,8 @@ export class AuthorizationService {
   } 
 
   getAuthToken() {
-    return this.cookieService.get('mlosc');
+    const { token } = JSON.parse(this.cookieService.get('mlosc'));
+    return token;
   }
 
   getAuthenticatedUser() {
