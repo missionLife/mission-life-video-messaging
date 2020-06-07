@@ -50,6 +50,9 @@ export class AuthorizationService {
     });
 
     if (token) {
+      console.log('IF TOKEN - this.cognitoUser ', this.cognitoUser);
+      const user = this.getAuthenticatedUser();
+      console.log('IF TOKEN - this.getAuthenticatedUser', user);
       this.loggedIn.next(true);
     }
     
@@ -64,6 +67,7 @@ export class AuthorizationService {
           // Setting cookie to expire 1 hour from now
           const oneHourFromNow = new Date;
           oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
+          console.log('The Cookie Domain: ', environment.cookieDomain);
           // Store Token in Cookies
           that.cookieService.set(
             'mlosc',

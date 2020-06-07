@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class NavigationBarComponent implements OnInit {
 
-  loggedIn: boolean = false;
+   loggedIn: boolean = false;
   $loggedIn: Observable<boolean>
 
   constructor(
@@ -20,10 +20,9 @@ export class NavigationBarComponent implements OnInit {
 
   ngOnInit() {
     this.$loggedIn = this.auth.isUserLoggedIn;
-    this.$loggedIn.subscribe(isLoggedIn => {
+    this.$loggedIn.subscribe((isLoggedIn) => {
       this.loggedIn = isLoggedIn;
-    })
-    
+    });
   }
 
   logOut() {
