@@ -46,6 +46,9 @@ export class LoginFormComponent implements OnInit {
   }
 
   cognitoCallback(error: Error, result: any) {
+    console.log('the cognito callback in login form:', error);
+    console.log('currentUserEmail: this.form.value.email.toLowerCase()', this.form.value.email.toLowerCase())
+    console.log('currentUserEmail: this.form.value.password', this.form.value.password)
     if (error.message != null) { //error
         if (error.message === 'User needs to set password.') {
             console.log("redirecting to set new password");

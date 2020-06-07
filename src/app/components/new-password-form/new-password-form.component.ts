@@ -61,6 +61,8 @@ export class NewPasswordFormComponent implements OnInit {
       password: this.form.value.newPassword
     };
 
+    console.log('new password user:', this.newPasswordUser);
+
     this.cognitoUserService.newPassword(this.newPasswordUser, this);
   }
 
