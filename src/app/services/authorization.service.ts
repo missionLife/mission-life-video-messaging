@@ -23,8 +23,7 @@ export class AuthorizationService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   
   constructor(
-    private cookieService: CookieService,
-    private router: Router
+    private cookieService: CookieService
   ) {
     this.inItAuth();
   }
@@ -51,6 +50,9 @@ export class AuthorizationService {
     });
 
     if (token) {
+      console.log('IF TOKEN - this.cognitoUser ', this.cognitoUser);
+      const user = this.getAuthenticatedUser();
+      console.log('IF TOKEN - this.getAuthenticatedUser', user);
       this.loggedIn.next(true);
     }
     

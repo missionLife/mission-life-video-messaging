@@ -19,6 +19,7 @@ export class NavigationBarComponent implements OnInit {
 
   ngOnInit() {
     this.$loggedIn = this.auth.isUserLoggedIn;
+    console.log('Am I Logged in??', this.$loggedIn);
   }
 
   logOut() {
