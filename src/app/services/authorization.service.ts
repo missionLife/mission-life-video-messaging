@@ -70,7 +70,7 @@ export class AuthorizationService {
             environment.cookieSecure,
             "Strict"
           );
-          this.loggedIn.next(true);
+          that.loggedIn.next(true);
           const refreshToken = result.getRefreshToken();
           
           const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
@@ -140,7 +140,6 @@ export class AuthorizationService {
           observer.error(err);
         },
         newPasswordRequired: (userAttributes, requiredAttributes) => {
-          this.loggedIn.next(true);
           callback.cognitoCallback(new Error(`User needs to set password.`), null);
           observer.complete();
         }
