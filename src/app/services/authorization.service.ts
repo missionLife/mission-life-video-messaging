@@ -48,10 +48,6 @@ export class AuthorizationService {
       region: 'us-east-2',
       credentials: awsCredentials
     });
-
-    if (token) {
-      this.loggedIn.next(true);
-    }
     
     const cognitoUser = this.cognitoUser;
 
@@ -74,7 +70,7 @@ export class AuthorizationService {
             environment.cookieSecure,
             "Strict"
           );
-  
+          this.loggedIn.next(true);
           const refreshToken = result.getRefreshToken();
           
           const needsRefresh = ( < AWS.CognitoIdentityCredentials > AWS.config.credentials).needsRefresh();
