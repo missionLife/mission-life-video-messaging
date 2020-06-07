@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ) {
     const currentUser = this.auth.getAuthenticatedUser();
-    console.log('current user: ', currentUser);
     const token = this.cookieService.get('mlosc');
     if (currentUser && token) {
       return true;

@@ -21,8 +21,6 @@ export class CognitoUserService {
   ) {}
 
   newPassword(newPasswordUser: NewPasswordUser, callback: CognitoCallback): void {
-    const that = this;
-
     let authenticationData = {
       Username: newPasswordUser.username,
       Password: newPasswordUser.existingPassword,
@@ -37,7 +35,7 @@ export class CognitoUserService {
     let cognitoUser = new CognitoUser(userData);
     
     cognitoUser.authenticateUser(authenticationDetails, {
-      newPasswordRequired: function (userAttributes, requiredAttributes) {
+      newPasswordRequired: (userAttributes, requiredAttributes) => {
         // User was signed up by an admin and must provide new
         // password and required attributes, if any, to complete
         // authentication.
@@ -45,24 +43,24 @@ export class CognitoUserService {
         delete userAttributes.email_verified;
 
         cognitoUser.completeNewPasswordChallenge(newPasswordUser.password, requiredAttributes, {
-          onSuccess: function (result) {
-            that.auth.inItAuth();
-            that.auth.configObservable.subscribe((value) => {
+          onSuccess: (result) => {
+            this.auth.generateUserSession(cognitoUser, newPasswordUser.username);
+            this.auth.configObservable.subscribe((value) => {
               if (value) {
                 callback.cognitoCallback(null, userAttributes);
               }
             });
           },
-          onFailure: function (err) {
+          onFailure: (err) => {
             console.log('Cognito User Service Error: ', err);
             callback.cognitoCallback(err, null);
           }
         });
       },
-      onSuccess: function (result) {
+      onSuccess: (result) => {
         callback.cognitoCallback(null, result);
       },
-      onFailure: function (err) {
+      onFailure: (err) => {
         callback.cognitoCallback(err, null);
       }
     });
