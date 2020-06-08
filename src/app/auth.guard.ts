@@ -20,10 +20,13 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ) {
-    const currentUser = this.auth.getAuthenticatedUser();
-    const token = this.cookieService.get('mlosc');
-    if (currentUser && token) {
-      return true;
+    const cookie = this.cookieService.get('mlosc');
+    if (cookie) {
+      const currentUser = this.auth.getAuthenticatedUser();
+      const { token } = JSON.parse(cookie);
+      if (currentUser && token) {
+        return true;
+      }
     }
     // If the user is not logged in, force redirect to login page
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});

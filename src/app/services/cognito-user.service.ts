@@ -3,6 +3,8 @@ import { AuthenticationDetails, CognitoUser, CognitoUserPool } from "amazon-cogn
 import { CognitoCallback } from '../models/cognito-callback';
 import { AuthorizationService } from './authorization.service';
 import { NewPasswordUser } from '../models/new-password-user';
+import AWS from 'aws-sdk';
+import { environment } from '../../environments/environment';
 
 const poolData = {
   UserPoolId: 'us-east-2_laC3yucNE', // Your user pool id here
@@ -37,7 +39,7 @@ export class CognitoUserService {
     let cognitoUser = new CognitoUser(userData);
     
     cognitoUser.authenticateUser(authenticationDetails, {
-      newPasswordRequired: function (userAttributes, requiredAttributes) {
+      newPasswordRequired: (userAttributes, requiredAttributes) => {
         // User was signed up by an admin and must provide new
         // password and required attributes, if any, to complete
         // authentication.
@@ -45,24 +47,24 @@ export class CognitoUserService {
         delete userAttributes.email_verified;
 
         cognitoUser.completeNewPasswordChallenge(newPasswordUser.password, requiredAttributes, {
-          onSuccess: function (result) {
-            that.auth.inItAuth();
-            that.auth.configObservable.subscribe((value) => {
+          onSuccess: async (result) => {
+            this.auth.generateUserSession(cognitoUser, newPasswordUser.username);
+            this.auth.isUserLoggedIn.subscribe((value) => {
               if (value) {
                 callback.cognitoCallback(null, userAttributes);
               }
             });
           },
-          onFailure: function (err) {
+          onFailure: (err) => {
             console.log('Cognito User Service Error: ', err);
             callback.cognitoCallback(err, null);
           }
         });
       },
-      onSuccess: function (result) {
+      onSuccess: (result) => {
         callback.cognitoCallback(null, result);
       },
-      onFailure: function (err) {
+      onFailure: (err) => {
         callback.cognitoCallback(err, null);
       }
     });
