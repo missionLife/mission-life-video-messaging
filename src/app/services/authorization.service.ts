@@ -96,7 +96,7 @@ export class AuthorizationService {
           '/',
           environment.cookieDomain, 
           environment.cookieSecure,
-          "Strict"
+          "None"
         );
         this.loggedIn.next(true);
       } else {
