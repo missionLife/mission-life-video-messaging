@@ -94,9 +94,9 @@ export class AuthorizationService {
           }),
           oneHourFromNow,
           '/',
-          environment.cookieDomain, 
+          '', 
           environment.cookieSecure,
-          "None"
+          "Strict"
         );
         this.loggedIn.next(true);
       } else {
