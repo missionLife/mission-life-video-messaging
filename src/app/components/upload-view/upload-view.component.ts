@@ -120,7 +120,7 @@ export class UploadViewComponent implements OnInit {
     video.preload = 'metadata'
 
     video.addEventListener('durationchange', () => {
-      if (video.duration < 61) {
+      if (video.duration < 181) {
         this.fileToUpload = files.item(0); /* now you can work with the file list */
         this.errorMessage = null;
       } else {
